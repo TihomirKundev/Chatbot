@@ -1,9 +1,10 @@
-﻿import React from "react";
+﻿import React, {useEffect} from "react";
 import {useState} from "react";
 import '../styles/style.css';
 
 import LetteredAvatar from 'react-lettered-avatar';
 import {status, ticketDTO} from "../../DTO/ticketDTO";
+import {getAllTickets} from "../api";
 
 
 export const ChatSelector = (props) => {
@@ -12,6 +13,7 @@ export const ChatSelector = (props) => {
         email: "john@example.com",
         name: "John",
         status: status.opened },
+        
         {    ticketNumber: "234567",
             email: "toni@example.com",
             name: "toni",
@@ -19,8 +21,9 @@ export const ChatSelector = (props) => {
     
     
     
-const [tickets, setTickets] = useState<ticketDTO[]>(sampleTicket); //TODO: fetch data from secondly exposed  WS endpoint /tickets (onGet)
+const [tickets, setTickets] = useState<ticketDTO[]>(sampleTicket); //TODO: remove sample data
 
+    
 const selectedTicket = props.pselectedTicket;
 const setSelectedTicket = props.psetSelectedTicket;
 
@@ -29,8 +32,10 @@ const setSelectedTicket = props.psetSelectedTicket;
    }
     
 
-
     
+    useEffect(() => {
+        getAllTickets().then((response) => {setTickets(response.data)});
+    }, []);
     
     
     return(
