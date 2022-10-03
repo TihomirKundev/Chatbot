@@ -1,11 +1,11 @@
-﻿export type ticketDTO = {
+﻿export type TicketDTO = {
     ticketNumber: String,
     email: String,
     name: String,
-    status: status  
+    status: Status  
 }
 
-export enum status {
+export enum Status {
     opened = 'opened', 
     closed = 'closed'
 }

@@ -110,7 +110,7 @@ namespace ChatBot
                         return;
                     }
                     var clients = WebSocketClientCollection.GetByConversationID(author.ConversationID);
-                    clients.ForEach(c => c.SendMessageAsync(message.Content));
+                    clients.ForEach(c => c.SendMessageAsync(message));
                     _logger.LogInformation($"Websocket client ID: '{message.AuthorID}' sent a message: '{message.Content}'.");
                     break;
                 case MessageAction.LEAVE:

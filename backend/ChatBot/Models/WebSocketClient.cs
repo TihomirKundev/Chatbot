@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using ChatBot.Models.DTOs;
 
 namespace ChatBot.Models
 {
@@ -20,9 +22,9 @@ namespace ChatBot.Models
         
         public Guid? ConversationID { get; set; }
         
-        public Task SendMessageAsync(string message)
+        public Task SendMessageAsync(MessageDTO message)
         {
-            byte[] msg = Encoding.UTF8.GetBytes(message);
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(message);
             return WebSocket.SendAsync(
                 new ArraySegment<byte>(msg, 0, msg.Length),
                 WebSocketMessageType.Text,

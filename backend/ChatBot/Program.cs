@@ -8,6 +8,13 @@ using ChatBot.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<TicketService>();
 builder.Services.AddRazorPages();
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: "Development",
+                      policy  =>
+                      {
+                          policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 
 builder.Services.AddSession(options =>
 {
@@ -26,8 +33,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
 app.UseWebSockets(new WebSocketOptions
 {
     KeepAliveInterval = TimeSpan.FromSeconds(60),
@@ -40,6 +45,8 @@ app.UseStaticFiles();
 
 
 app.UseRouting();
+
+app.UseCors("Development");
 
 app.UseSession();
 

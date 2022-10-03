@@ -8,7 +8,7 @@ import ChatBot from "./components/Customer/ChatBot";
 function App() {
   return (
     <div className="App">
-        {/*<ChatBot />*/}
+        <ChatBot />
         <TechSupportPage />
     </div>
   );
