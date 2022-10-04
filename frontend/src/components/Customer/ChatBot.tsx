@@ -5,14 +5,14 @@ import {MessageWsDTO} from "../DTO/messageWsDTO";
 import {webSocketServerAddress, botNickName, ChatBot2OpenningMessage, ChatBotOpennigMessage, techSupportNickName} from "../../app.properties";
 import {TicketCreateDTO} from "../DTO/ticketCreationDTO";
 import {generateTicket} from "./api";
-import {ticketDTO} from "../DTO/ticketDTO";
+import {TicketDTO, ticketDTO} from "../DTO/ticketDTO";
 import ChatBox from './ChatBox';
 
 
 const ChatBot = () => {
     const ws = useRef(null);
 
-    const [ticket, setTicket] = useState<ticketDTO>(null);
+    const [ticket, setTicket] = useState<TicketDTO>(null);
     const [wsMessages, setWsMessages] = useState<MessageWsDTO[]>([]);
     
     const [isChatOpen, setIsChatOpen] = useState(false); 
@@ -20,7 +20,8 @@ const ChatBot = () => {
     enum ChatStep {ENTER_NAME, ENTER_EMAIL, CHAT_STARTED}
     const [chatStep, setChatStep] = useState<ChatStep>(ChatStep.ENTER_NAME);
     const [TicketCreatorDTO, setTicketCreatorDTO] = useState<TicketCreateDTO>({name: "", email: ""});
-    const handleCreationOfTicket = (clientMessage) => {
+    
+    const handleCreationOfTicket =  (clientMessage) => {
         if (chatStep === ChatStep.ENTER_NAME) {
             setTicketCreatorDTO({...TicketCreatorDTO, name: clientMessage});
             setWsMessages([...wsMessages,
@@ -96,6 +97,11 @@ const ChatBot = () => {
             ws.current?.close();
         };*/
     }, [wsMessages]);
+
+
+   
+    
+    
     
     return(
         <div id="center-text">

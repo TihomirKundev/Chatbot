@@ -1,6 +1,5 @@
 ﻿export type MessageWsDTO = {
-    sendClientId: string,
-    action: string,
-    msg: string,
-    nick: string
+    Action: string,
+    Content: string
+    
 }

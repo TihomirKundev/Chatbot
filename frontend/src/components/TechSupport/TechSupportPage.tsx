@@ -5,6 +5,7 @@ import {Box} from "@mui/material";
 import {useState, useEffect} from "react";
 import {TicketDTO, Status} from "../DTO/TicketDTO";
 import {getAllTickets} from "./api";
+import PleseSelectChat from "./children/PleseSelectChat";
 
 
 const TechSupportPage = () => {
@@ -38,7 +39,7 @@ const TechSupportPage = () => {
             }}
         >
             <ChatSelector selectedTicket={selectedTicket} onSelect={setSelectedTicket} tickets={tickets} />
-            { selectedTicket ? <ChatWindow ticket={selectedTicket} /> : <p>select a ticket :-)</p> }
+            { selectedTicket ? <ChatWindow ticket={selectedTicket} /> : <PleseSelectChat/> }
         </Box>
     );
 }
