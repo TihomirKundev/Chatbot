@@ -7,12 +7,14 @@ public class User : Anonymous
 {
     public User(string firstName,
                 string lastName,
+                string password,
                 string email,
                 string phone,
                 Role role)
     {
         FirstName = firstName;
         LastName = lastName;
+        Password = password;
         Email = email;
         Phone = phone;
         Role = role;
@@ -20,15 +22,28 @@ public class User : Anonymous
     public User(Guid id,
                 string firstName,
                 string lastName,
+                string password,
                 string email,
                 string phone,
                 Role role) : base(id)
     {
         FirstName = firstName;
         LastName = lastName;
+        Password = password;
         Email = email;
         Phone = phone;
         Role = role;
+    }
+    
+    public string Password
+    {
+        get => _password;
+        private set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentNullException("Password can`t be empty");
+            _password = value;
+        }
     }
 
     public string FirstName
@@ -84,7 +99,9 @@ public class User : Anonymous
     }
 
     public Role Role { get; }
-
+   
+    private string _password;
+        
     private string _firstName = null!;
 
     private string _lastName = null!;
