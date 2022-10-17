@@ -7,9 +7,6 @@ from DTO.faqQuestionRequestDTO import faqQuestionDTO
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 
 # @app.get("/hello/{name}")

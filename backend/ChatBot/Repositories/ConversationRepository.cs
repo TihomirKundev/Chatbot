@@ -77,7 +77,7 @@ public class ConversationRepository : IConversationRepository
 
         if (!reader.HasRows)
             return null;
-
+        reader.Read();
         var status = Enum.Parse<ConversationStatus>(reader.GetString("status"), true);
         var messages = _messageRepo.GetAllMessagesByConversationID(id);
         var participants = _participantRepo.GetParticipantsByConversationID(id);

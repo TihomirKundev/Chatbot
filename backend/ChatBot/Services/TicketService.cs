@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ChatBot.Services;
 
-[TransientService]
+[SingletonService]
 public class TicketService : ITicketService
 {
     private List<TicketDTO> ticketList = new();
