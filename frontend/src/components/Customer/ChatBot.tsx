@@ -49,7 +49,7 @@ const ChatBot = () => {
             return;
         }
         if (ws.current !== null) {
-            ws.current.send(JSON.stringify({Action: 'send', Content: clientMessage, Nickname: 'User'}));
+            ws.current.send(JSON.stringify({Action: 'send', Content: clientMessage, Nickname: 'User', Timestamp: Date.now()}));
         }
     };
 

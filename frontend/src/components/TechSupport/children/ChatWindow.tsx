@@ -56,7 +56,7 @@ const ChatWindow = ({ticket}) => {
     }, [wsMessages]);
 
     const handleSend = () => {
-        ws.current.send(JSON.stringify({Action: 'send', Content: inputMsg, Nickname: techSupportNickName}));
+        ws.current.send(JSON.stringify({Action: 'send', Content: inputMsg, Nickname: techSupportNickName, Timestamp: Date.now()}));
         setInputMsg("");
     };
     

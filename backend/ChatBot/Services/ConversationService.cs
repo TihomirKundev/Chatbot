@@ -1,20 +1,53 @@
-﻿using ChatBot.Models;
+﻿using ChatBot.Extensions;
+using ChatBot.Models;
+using ChatBot.Models.DTOs;
+using ChatBot.Models.Enums;
+using ChatBot.Repositories.Interfaces;
+using ChatBot.Services.Interfaces;
+using System;
+namespace ChatBot.Services;
 
-namespace ChatBot.Services
+[TransientService]
+public class ConversationService : IConversationService
 {
-    public class ConversationService
+    private readonly IConversationRepository _conversationRepo;
+
+    private readonly IMessageService _messageService;
+
+    public ConversationService(IConversationRepository conversationRepo,
+                               IMessageService mesageService)
     {
-        public Conversation CreateNew()
-        {
-            return new Conversation();
-        }
-        public bool AddMessage(Conversation c, Message m)
-        {
-            return c.AddMessage(m);
-        }
-        public bool RemoveMessage(Conversation c, Message m)
-        {
-            return c.RemoveMessage(m);
-        }
+        _conversationRepo = conversationRepo;
+        _messageService = mesageService;
     }
+
+    public Conversation CreateNewConversation(Guid id)
+    {
+        var conversation = new Conversation(id);
+        _conversationRepo.CreateConversation(conversation);
+        return conversation;
+    }
+
+    public Conversation? GetConversationById(Guid id)
+    {
+        return _conversationRepo.GetConversationByID(id);
+    }
+
+    public void AddMessageToConversation(MessageDTO messageDTO, Guid conversationID)
+    {
+        var message = _messageService.CreateMessage(messageDTO);
+        _conversationRepo.SaveMessageToConversation(message, conversationID);
+    }
+
+    public void AddParticipantToConversation(IParticipant participant, Guid conversationID)
+    {
+        _conversationRepo.AddParticipantToConversation(participant.ID, conversationID);
+    }
+
+    public void SetConversationStatus(Guid conversationID, ConversationStatus status)
+    {
+        _conversationRepo.SetConversationStatus(conversationID, status);
+    }
+
+
 }
