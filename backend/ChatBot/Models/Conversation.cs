@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatBot.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,32 +7,50 @@ namespace ChatBot.Models;
 
 public class Conversation
 {
-    public Conversation()
+    public Conversation(Guid id)
     {
+        ID = id;
         Status = ConversationStatus.ONGOING;
     }
 
-    public Conversation(Guid id, ConversationStatus status)
+    public Conversation(Guid id, ConversationStatus status, SortedSet<Message> messages, ISet<IParticipant> participants)
     {
         ID = id;
         Status = status;
+        Messages = messages;
+        Participants = participants;
     }
 
-    public Guid ID { get; }
+    public Guid ID { get; } = Guid.NewGuid();
 
     // Sorted by the timestamp of the messages
     // See Message.CompareTo() method for more info
-    public SortedSet<Message> Messages => new(_messages);
+    public SortedSet<Message> Messages
+    {
+        get => new(_messages);
+        set => _messages = value;
+    }
 
     public ConversationStatus Status { get; private set; }
 
     public DateTime StartTime => _messages.First().Timestamp;
 
-    // Returns null if the conversation is ongoing, otherwise returns last message's timestamp
-    public DateTime? EndTime => Status == ConversationStatus.ONGOING ? null : _messages.Last().Timestamp;
+    public DateTime? EndTime
+    {
+        get
+        {
+            if (Status == ConversationStatus.ONGOING)
+                return null;
+            else
+                return _messages.Last().Timestamp;
+        }
+    }
 
-    public HashSet<Participant> Participants => new(_participants);
-
+    public ISet<IParticipant> Participants
+    {
+        get => new HashSet<IParticipant>(_participants);
+        set => _participants = value;
+    }
     public bool AddMessage(Message message) => _messages.Add(message);
 
     public bool RemoveMessage(Message message) => _messages.Remove(message);
@@ -40,10 +59,11 @@ public class Conversation
     {
         if (Status != ConversationStatus.ONGOING || status == ConversationStatus.ONGOING)
             return false;
+
         Status = status;
         return true;
     }
 
-    private readonly SortedSet<Message> _messages = new();
-    private readonly HashSet<Participant> _participants = new();
+    private SortedSet<Message> _messages = new();
+    private ISet<IParticipant> _participants = new HashSet<IParticipant>();
 }

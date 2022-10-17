@@ -1,4 +1,4 @@
-﻿namespace ChatBot.Models;
+﻿namespace ChatBot.Models.Enums;
 
 public enum Role
 {

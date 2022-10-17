@@ -1,4 +1,5 @@
 ﻿using ChatBot.Models;
+using ChatBot.Models.Enums;
 
 namespace ChatBot.Tests.Models;
 
@@ -7,9 +8,9 @@ public class ConversationTests
     [Test]
     public void SortedSet_FirstMessage()
     {
-        var author = new Anonymous();
+        var author = new User();
         var time = DateTime.Now;
-        var convo = new Conversation();
+        var convo = new Conversation(Guid.NewGuid());
 
         convo.AddMessage(new Message(author, "b", time.AddSeconds(2)));
         convo.AddMessage(new Message(author, "a", time));
@@ -25,9 +26,9 @@ public class ConversationTests
     [Test]
     public void SortedSet_LastMessage_Ended_Conversation()
     {
-        var author = new Anonymous();
+        var author = new User();
         var time = DateTime.Now;
-        var convo = new Conversation();
+        var convo = new Conversation(Guid.NewGuid());
 
         convo.AddMessage(new Message(author, "b", time.AddSeconds(2)));
         convo.AddMessage(new Message(author, "a", time));
@@ -44,9 +45,9 @@ public class ConversationTests
     [Test]
     public void SortedSet_LastMessage_Ongoing_Conversation()
     {
-        var author = new Anonymous();
+        var author = new User();
         var time = DateTime.Now;
-        var convo = new Conversation();
+        var convo = new Conversation(Guid.NewGuid());
 
         convo.AddMessage(new Message(author, "b", time.AddSeconds(2)));
         convo.AddMessage(new Message(author, "a", time));

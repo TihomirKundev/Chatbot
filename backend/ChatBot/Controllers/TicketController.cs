@@ -1,8 +1,9 @@
 ﻿using ChatBot.Models.DTOs;
 using ChatBot.Services;
+using ChatBot.Services.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 
 namespace ChatBot
 {
@@ -11,9 +12,9 @@ namespace ChatBot
     [EnableCors("Development")]
     public class TicketController : ControllerBase
     {
-        private TicketService _ticketManager;
-        
-        public TicketController(TicketService ticketManager)
+        private ITicketService _ticketManager;
+
+        public TicketController(ITicketService ticketManager)
         {
             _ticketManager = ticketManager;
         }
@@ -25,8 +26,8 @@ namespace ChatBot
         {
             TicketDTO ticket = _ticketManager.CreateTicket(ticketReq);
             return CreatedAtAction(nameof(Create), ticket);
-        }   
-        
+        }
+
         [HttpGet("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

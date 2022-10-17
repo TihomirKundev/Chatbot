@@ -1,27 +1,26 @@
-﻿using System;
+﻿using ChatBot.Models.DTOs;
+using System;
 using System.Net.WebSockets;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Threading;
-using ChatBot.Models.DTOs;
+using System.Threading.Tasks;
 
 namespace ChatBot.Models
 {
     public class WebSocketClient
     {
-        public WebSocketClient(Participant participant, WebSocket webSocket)
+        public WebSocketClient(IParticipant participant, WebSocket webSocket)
         {
             Participant = participant;
             WebSocket = webSocket;
         }
-        
-        public Participant Participant { get; }
-        
+
+        public IParticipant Participant { get; }
+
         public WebSocket WebSocket { get; }
-        
+
         public Guid? ConversationID { get; set; }
-        
+
         public Task SendMessageAsync(MessageDTO message)
         {
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(message);

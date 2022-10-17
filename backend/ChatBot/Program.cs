@@ -1,16 +1,18 @@
-using ChatBot;
+using ChatBot.Extensions;
+using ChatBot.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using ChatBot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<TicketService>();
+
+builder.Services.RegisterServices();
 builder.Services.AddRazorPages();
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddPolicy(name: "Development",
-                      policy  =>
+                      policy =>
                       {
                           policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                       });
@@ -23,12 +25,12 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -38,7 +40,8 @@ app.UseWebSockets(new WebSocketOptions
     KeepAliveInterval = TimeSpan.FromSeconds(60),
 });
 
-//app.UseMiddleware<WebsocketHandlerMiddleware>();
+// work in progress
+//app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<ConversationMiddleware>();
 
 app.UseStaticFiles();
