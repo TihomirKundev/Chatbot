@@ -1,7 +1,7 @@
 ﻿import './style/style.css';
 import ChatIcon from '@mui/icons-material/Chat';
 import {useEffect, useState, useRef} from "react";
-import {MessageWsDTO} from "../DTO/messageWsDTO";
+import {MessageWsDTO, quickSelector} from "../DTO/messageWsDTO";
 import {webSocketServerAddress, botNickName, ChatBot2OpenningMessage, ChatBotOpennigMessage, techSupportNickName} from "../../app.properties";
 import {TicketCreateDTO} from "../DTO/ticketCreationDTO";
 import {generateTicket} from "./api";
@@ -43,13 +43,13 @@ const ChatBot = () => {
         }
     }
 
-    const handleSend = (clientMessage) => {
+    const handleSend = (clientMessage,QuickSelect:quickSelector) => {
         if (chatStep !== ChatStep.CHAT_STARTED) {
             handleCreationOfTicket(clientMessage);
             return;
         }
         if (ws.current !== null) {
-            ws.current.send(JSON.stringify({Action: 'send', Content: clientMessage, Nickname: 'User'}));
+            ws.current.send(JSON.stringify({Action: 'send', Content: clientMessage, Nickname: 'User', QuickSelector:QuickSelect ,Timestamp: Date.now()}));
         }
     };
 

@@ -5,8 +5,8 @@ import {BaseUrl, TicketApi} from "../../app.properties";
 
 
 export const getAllTickets = async () => {
-    return await axios.get(BaseUrl + TicketApi);
-
+    var a = await axios.get(BaseUrl + TicketApi);
+      return a;
 }
 
 

@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ChatBot.Extensions;
 using ChatBot.Models.DTOs;
+using ChatBot.Services.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace ChatBot.Services;
 
-public class TicketService
+[SingletonService]
+public class TicketService : ITicketService
 {
     private List<TicketDTO> ticketList = new();
 
     public TicketService()
     {
-        
+
     }
-    
+
     public TicketDTO CreateTicket(TicketCreateDTO incomingTicket)
     {
         var ticket = new TicketDTO();

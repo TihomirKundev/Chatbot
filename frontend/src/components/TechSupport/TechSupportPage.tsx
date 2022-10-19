@@ -28,7 +28,8 @@ const TechSupportPage = () => {
     const [selectedTicket, setSelectedTicket] = useState<TicketDTO>(null);
 
     useEffect(() => {
-        getAllTickets().then((response) => {setTickets(response.data)});
+        getAllTickets().then((response) => {setTickets(response.data); console.log("AAAAA",response.data)});
+        
     }, []);
 
     return (

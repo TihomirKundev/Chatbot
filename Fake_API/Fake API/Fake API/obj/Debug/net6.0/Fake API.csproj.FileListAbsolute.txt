@@ -1,0 +1,33 @@
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\appsettings.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Fake API.exe
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Fake API.deps.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Fake API.runtimeconfig.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Fake API.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Fake API.pdb
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\System.Data.SqlClient.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.csproj.AssemblyReference.cache
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.AssemblyInfoInputs.cache
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.AssemblyInfo.cs
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.csproj.CoreCompileInputs.cache
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\scopedcss\bundle\Fake API.styles.css
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.csproj.CopyComplete
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\refint\Fake API.dll
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.pdb
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\Fake API.genruntimeconfig.cache
+C:\Users\ra408\OneDrive\Работен плот\Fake API\Fake API\obj\Debug\net6.0\ref\Fake API.dll

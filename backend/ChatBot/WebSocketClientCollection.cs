@@ -12,7 +12,7 @@ namespace ChatBot
         public static List<WebSocketClient> GetAll() => new(_clients.Values);
 
         public static WebSocketClient? Get(Guid id) => _clients.TryGetValue(id, out var client) ? client : null;
-        
+
         public static List<WebSocketClient> GetByConversationID(Guid? conversationId)
         {
             if (conversationId is null)
@@ -22,7 +22,7 @@ namespace ChatBot
                 .Where(c => c.ConversationID == conversationId)
                 .ToList();
         }
-        
+
         public static bool Add(WebSocketClient client)
         {
             if (!_clients.TryGetValue(client.Participant.ID, out _))

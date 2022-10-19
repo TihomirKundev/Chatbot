@@ -29,6 +29,42 @@
   color: #61dafb;
 }
 
+
+.quickSelector{
+
+
+  -webkit-text-size-adjust: none;
+  box-sizing: border-box;
+  outline: none;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: antialiased!important;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+  max-width: 100%;
+  /* margin: 4px; */
+  height: 22px;
+  display: flex;
+  align-items: center;
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 0 16px;
+  -webkit-backface-visibility: hidden;
+  transition: all .3s;
+  cursor: pointer;
+  border-color: #5a5eb9;
+  color: #5a5eb9;
+  background: rgb(255, 255, 255);
+
+  width: 83px;
+  margin: 4px;
+}
+.quickSelectorElement{
+
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
