@@ -35,7 +35,8 @@ const TechSupportPage = () => {
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: 'row'
+                flexDirection: 'row',
+                padding: '5%'
             }}
         >
             <ChatSelector selectedTicket={selectedTicket} onSelect={setSelectedTicket} tickets={tickets} />
