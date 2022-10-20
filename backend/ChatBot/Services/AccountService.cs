@@ -22,8 +22,15 @@ public class AccountService : IAccountService
         _accountRepo.SaveAccount(account);
     }
 
+    public Account GetById(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Account> GetAllAccounts()
     {
         return _accountRepo.GetAllAccounts();
     }
+    
+    
 }

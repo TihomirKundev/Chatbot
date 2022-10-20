@@ -57,6 +57,10 @@ public class AccountRepository : IAccountRepository
         }
     }
 
+    public Account GetByEmail(string email)
+    {
+        throw new NotImplementedException();
+    }
 
     public List<Account> GetAllAccounts()
     {

@@ -9,7 +9,6 @@ using System.Linq;
 namespace ChatBot.Repositories;
 
 [Repository]
-
 public class MessageRepository : IMessageRepository
 {
     private readonly string _connString;

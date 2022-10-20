@@ -16,7 +16,6 @@ public class AiClientService : IAiClientService
     private string _aiBaseURL = "http://127.0.0.1:8000";
     private HttpClient _httpClient = new HttpClient();
     
-    
     public AiClientService(){}
 
     public  async Task<string> getFaqAnswer(string message)
@@ -32,9 +31,4 @@ public class AiClientService : IAiClientService
         var answer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return answer;
     }
-    
-    
-    
-    
-    
 }

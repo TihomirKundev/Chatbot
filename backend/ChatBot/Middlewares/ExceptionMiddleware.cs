@@ -16,6 +16,7 @@ public class ExceptionMiddleware
         _logger = loggerFactory.CreateLogger<ExceptionMiddleware>();
         _next = next;
     }
+    
     public async Task InvokeAsync(HttpContext httpContext)
     {
         try

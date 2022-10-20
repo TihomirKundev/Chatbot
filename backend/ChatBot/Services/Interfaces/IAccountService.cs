@@ -8,5 +8,6 @@ namespace ChatBot.Services.Interfaces
     {
         List<Account> GetAllAccounts();
         void SaveAccount(Account account);
+        Account GetById(Guid id);
     }
 }

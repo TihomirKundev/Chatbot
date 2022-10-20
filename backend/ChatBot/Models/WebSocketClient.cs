@@ -1,7 +1,7 @@
 ﻿using ChatBot.Models.DTOs;
 using System;
 using System.Net.WebSockets;
-using System.Text.Json;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +23,7 @@ namespace ChatBot.Models
 
         public Task SendMessageAsync(MessageDTO message)
         {
-            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(message);
+            byte[] msg = Encoding.UTF8.GetBytes(message.Content);
             return WebSocket.SendAsync(
                 new ArraySegment<byte>(msg, 0, msg.Length),
                 WebSocketMessageType.Text,

@@ -9,5 +9,6 @@ namespace ChatBot.Repositories.Interfaces
         Account? GetAccountByID(Guid id);
         List<Account> GetAllAccounts();
         void SaveAccount(Account account);
+        Account GetByEmail(string email);
     }
 }

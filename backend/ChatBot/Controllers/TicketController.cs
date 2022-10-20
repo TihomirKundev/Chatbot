@@ -9,7 +9,7 @@ namespace ChatBot
 {
     [ApiController]
     [Route("ticket")] //might need [] around ticket
-    [EnableCors("Development")]
+    
     public class TicketController : ControllerBase
     {
         private ITicketService _ticketManager;
@@ -35,12 +35,6 @@ namespace ChatBot
         {
             TicketDTO[] tickets = _ticketManager.GetAllTickets();
             return Ok(tickets);
-        }
-
-        [HttpOptions]
-        public IActionResult PreflightRoute()
-        {
-            return NoContent();
         }
     }
 }
