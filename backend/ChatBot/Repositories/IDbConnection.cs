@@ -1,7 +1,6 @@
-﻿namespace ChatBot.Repositories
+﻿namespace ChatBot.Repositories;
+
+public interface IDbConnection
 {
-    public interface IDbConnection
-    {
-        string GetConnectionString();
-    }
+    string GetConnectionString();
 }

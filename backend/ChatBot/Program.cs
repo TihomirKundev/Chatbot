@@ -1,13 +1,10 @@
+using ChatBot.Auth.Jwt;
+using ChatBot.Extensions;
 using ChatBot.Middlewares;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
-using ChatBot.Auth;
-using ChatBot.Auth.Helpers;
-using ChatBot.Extensions;
-using ChatBot.Services;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +26,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseWebSockets(new WebSocketOptions {KeepAliveInterval = TimeSpan.FromSeconds(60),});
+app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(60), });
 
 app.UseStaticFiles();
 
@@ -39,7 +36,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoint => { endpoint.MapControllers(); });
 
-app.UseWebSockets(new WebSocketOptions {KeepAliveInterval = TimeSpan.FromSeconds(60),});
+app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(60), });
 
 //Middlewares (interceptors)
 app.UseMiddleware<ErrorHandlerMiddleware>(); //custom global error handler

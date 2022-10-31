@@ -1,4 +1,4 @@
-using ChatBot.Models.DTOs;
+using ChatBot.Models.Request;
 using ChatBot.Models.Response;
 
 namespace ChatBot.Services.Interfaces;
