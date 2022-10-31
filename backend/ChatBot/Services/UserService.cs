@@ -1,13 +1,10 @@
-using ChatBot.Auth;
-using ChatBot.Auth.Exception.CustomExceptions;
-using ChatBot.Models.DTOs;
-using ChatBot.Models.Response;
+using ChatBot.Auth.Jwt;
+using ChatBot.Extensions;
 using ChatBot.Models;
 using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using ChatBot.Extensions;
 
 namespace ChatBot.Services;
 
@@ -15,14 +12,13 @@ namespace ChatBot.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepo;
-    private readonly JwtUtils _jwtUtils;
 
 
     public UserService(IUserRepository userRepository)
     {
         _userRepo = userRepository;
     }
-    
+
     public User? CreateNewUser(Guid id)
     {
         if (id == Bot.GetChatBotID())
@@ -35,7 +31,7 @@ public class UserService : IUserService
         _userRepo.CreateUser(user);
         return user;
     }
-    
+
     // public AuthenticateResponse Authenticate(AuthenticateRequest request)
     // {
     //     var account = _accountRepo.GetByEmail(request.Email); //change to http call to fake api
@@ -46,7 +42,7 @@ public class UserService : IUserService
     //     var token = _jwtUtils.GenerateToken(user);
     //     return new AuthenticateResponse(user, token);     
     // }   
-    
+
     // NOTE: This does NOT return users that have accounts
     // See AccountService.GetAllAccounts() for that (or ParticipantService.GetAllParticipants() for both)
     public List<User> GetAllUsers()

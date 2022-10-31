@@ -2,8 +2,8 @@
 using ChatBot.Models;
 using ChatBot.Models.Enums;
 using ChatBot.Repositories.Interfaces;
-using Microsoft.VisualBasic;
-using MySql.Data.MySqlClient;
+using ChatBot.Repositories.Utils;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
 
@@ -29,56 +29,52 @@ public class ConversationRepository : IConversationRepository
         {
             try
             {
-                message.ID = MySqlHelper.ExecuteNonQuery(
+                message.ID = SqlHelper.ExecuteNonQuery(
                     _connString,
                     "INSERT INTO messages(content, author_id, timestamp, conversation_id)" +
                     "VALUES (@content, @authorid, @timestamp, @conversation_id);",
-                    new MySqlParameter("@content", message.Content),
-                    new MySqlParameter("@authorid", message.Author.ID),
-                    new MySqlParameter("@timestamp", message.Timestamp),
-                    new MySqlParameter("@conversation_id", conversationId));
+                    new SqlParameter("@content", message.Content),
+                    new SqlParameter("@authorid", message.Author.ID),
+                    new SqlParameter("@timestamp", message.Timestamp),
+                    new SqlParameter("@conversation_id", conversationId));
             }
-            catch (MySqlException ex) when (ex.Number == 1062)
+            catch (SqlException ex) when (ex.Number == 1062)
             {
                 throw new DuplicateNameException();
             }
         }
         else
         {
-            MySqlHelper.ExecuteNonQuery(
+            SqlHelper.ExecuteNonQuery(
                 _connString,
-                "UPDATE messages SET " +
-                    "content = @content " +
-                    "author_id = @authorId " +
-                    "timestamp = @timestamp " +
-                "WHERE id = @id;",
-                new MySqlParameter("@id", message.ID),
-                new MySqlParameter("@content", message.Content),
-                new MySqlParameter("@authorId", message.Author.ID),
-                new MySqlParameter("@timestamp", message.Timestamp));
+                "UPDATE messages SET  content = @content  author_id = @authorId timestamp = @timestamp WHERE id = @id;",
+                new SqlParameter("@id", message.ID),
+                new SqlParameter("@content", message.Content),
+                new SqlParameter("@authorId", message.Author.ID),
+                new SqlParameter("@timestamp", message.Timestamp));
         }
     }
 
     public void AddParticipantToConversation(Guid participantID, Guid conversationID)
     {
-        MySqlHelper.ExecuteNonQuery(
+        SqlHelper.ExecuteNonQuery(
             _connString,
             "INSERT INTO conversations_users(conversation_id, user_id) VALUES (@conversation_id, @user_id)",
-            new MySqlParameter("@conversation_id", conversationID),
-            new MySqlParameter("@user_id", participantID));
+            new SqlParameter("@conversation_id", conversationID),
+            new SqlParameter("@user_id", participantID));
     }
 
     public Conversation? GetConversationByID(Guid id)
     {
-        using var reader = MySqlHelper.ExecuteReader(
+        using var reader = SqlHelper.ExecuteReader(
             _connString,
             "SELECT status FROM conversations WHERE id = @id;",
-            new MySqlParameter("@id", id));
+            new SqlParameter("@id", id));
 
         if (!reader.HasRows)
             return null;
         reader.Read();
-        var status = Enum.Parse<ConversationStatus>(reader.GetString("status"), true);
+        var status = (ConversationStatus)reader.GetInt32("status");
         var messages = _messageRepo.GetAllMessagesByConversationID(id);
         var participants = _participantRepo.GetParticipantsByConversationID(id);
 
@@ -89,13 +85,13 @@ public class ConversationRepository : IConversationRepository
     {
         try
         {
-            MySqlHelper.ExecuteNonQuery(
+            SqlHelper.ExecuteNonQuery(
             _connString,
             "INSERT INTO conversations(id, status) VALUES (@id, @status) ",
-            new MySqlParameter("@id", conversation.ID),
-            new MySqlParameter("@status", conversation.Status));
+            new SqlParameter("@id", conversation.ID),
+            new SqlParameter("@status", conversation.Status));
         }
-        catch (MySqlException ex) when (ex.ErrorCode == 1062)
+        catch (SqlException ex) when (ex.ErrorCode == 1062)
         {
             throw new DuplicateNameException($"Duplicate conversation ID: {conversation.ID}");
         }
@@ -103,10 +99,10 @@ public class ConversationRepository : IConversationRepository
 
     public void SetConversationStatus(Guid id, ConversationStatus status)
     {
-            MySqlHelper.ExecuteNonQuery(
-            _connString,
-            "UPDATE conversations SET status = @status WHERE id = @id",
-            new MySqlParameter("@id", id),
-            new MySqlParameter("@status", status));
+        SqlHelper.ExecuteNonQuery(
+        _connString,
+        "UPDATE conversations SET status = @status WHERE id = @id",
+        new SqlParameter("@id", id),
+        new SqlParameter("@status", status));
     }
 }

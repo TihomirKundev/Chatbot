@@ -2,9 +2,9 @@
 
 public class TicketDTO
 {
-    public string ticketNumber { get; set; }
-    public string email { get; set; }
-    public string name { get; set; }
+    public string ticketnumber { get; set; } = string.Empty;
+    public string email { get; set; } = string.Empty;
+    public string name { get; set; } = string.Empty;
     public Status status { get; set; }
 }
 

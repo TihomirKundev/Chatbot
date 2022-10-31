@@ -2,7 +2,8 @@
 using ChatBot.Models;
 using ChatBot.Models.Enums;
 using ChatBot.Repositories.Interfaces;
-using MySql.Data.MySqlClient;
+using ChatBot.Repositories.Utils;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +25,7 @@ public class AccountRepository : IAccountRepository
         try
         {
             string query =
-                "IF EXISTS (SELECT 1 FROM accounts WHERE id = @id) " +
+            "IF EXISTS (SELECT 1 FROM accounts WHERE id = @id) " +
                 "BEGIN " +
                     "UPDATE accounts SET " +
                         "firstname = @firstname " +
@@ -35,23 +36,24 @@ public class AccountRepository : IAccountRepository
                         "role = @role " +
                     "WHERE id = @id " +
                 "END " +
-                "ELSE " +
+            "ELSE " +
+                "BEGIN " + 
                     "INSERT INTO accounts(id, firstname, lastname, email, phone, password, role) " +
                     "VALUES (@id, @firstname, @lastname, @email, @phone, @password, @role) " +
                 "END";
 
-            MySqlHelper.ExecuteNonQuery(
+            SqlHelper.ExecuteNonQuery(
                 _connString,
                 query,
-                new MySqlParameter("@id", account.ID),
-                new MySqlParameter("@firstname", account.FirstName),
-                new MySqlParameter("@lastname", account.LastName),
-                new MySqlParameter("@email", account.Email),
-                new MySqlParameter("@phone", account.Phone),
-                new MySqlParameter("@password", account.Password),
-                new MySqlParameter("@role", account.Role));
+                new SqlParameter("@id", account.ID),
+                new SqlParameter("@firstname", account.FirstName),
+                new SqlParameter("@lastname", account.LastName),
+                new SqlParameter("@email", account.Email),
+                new SqlParameter("@phone", account.Phone),
+                new SqlParameter("@password", account.Password),
+                new SqlParameter("@role", account.Role));
         }
-        catch (MySqlException ex) when (ex.Number == 1062)
+        catch (SqlException ex) when (ex.Number == 1062)
         {
             throw new DuplicateNameException();
         }
@@ -66,7 +68,7 @@ public class AccountRepository : IAccountRepository
     {
         var accounts = new List<Account>();
 
-        using var reader = MySqlHelper.ExecuteReader(
+        using var reader = SqlHelper.ExecuteReader(
             _connString,
             "SELECT id, firstname, lastname, email, phone, password, role FROM accounts");
 
@@ -82,7 +84,7 @@ public class AccountRepository : IAccountRepository
                 reader.GetString("email"),
                 reader.GetString("phone"),
                 reader.GetString("password"),
-                Enum.Parse<Role>(reader.GetString("role"), true)
+                (Role)reader.GetInt32("role")
             ));
         }
         return accounts;
@@ -90,10 +92,10 @@ public class AccountRepository : IAccountRepository
 
     public Account? GetAccountByID(Guid id)
     {
-        using var reader = MySqlHelper.ExecuteReader(
+        using var reader = SqlHelper.ExecuteReader(
             _connString,
             "SELECT firstname, lastname, email, phone, password, role FROM accounts WHERE id = @id",
-            new MySqlParameter("@id", id));
+            new SqlParameter("@id", id));
 
         if (!reader.Read())
             return null;
@@ -105,7 +107,7 @@ public class AccountRepository : IAccountRepository
             reader.GetString("email"),
             reader.GetString("phone"),
             reader.GetString("password"),
-            Enum.Parse<Role>(reader.GetString("role"), true)
+            (Role)reader.GetInt32("role")
         );
     }
 }

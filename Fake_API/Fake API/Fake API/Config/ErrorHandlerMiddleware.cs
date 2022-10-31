@@ -1,11 +1,11 @@
-﻿using ChatBot.Exceptions;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Fake_API.Exception;
+using Microsoft.AspNetCore.Http;
 
-namespace ChatBot.Middlewares;
+namespace ChatBot.Auth;
 
 public class ErrorHandlerMiddleware
 {
@@ -38,21 +38,15 @@ public class ErrorHandlerMiddleware
                 case UserNotFoundException e:
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
-                case DuplicateEmailException e:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-                case InvalidCredentialsException e:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
                 case KeyNotFoundException e:
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
+                    break;   
             }
         }
     }
 
-
+    
 }

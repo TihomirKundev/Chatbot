@@ -19,7 +19,7 @@ public class TicketService : ITicketService
     public TicketDTO CreateTicket(TicketCreateDTO incomingTicket)
     {
         var ticket = new TicketDTO();
-        ticket.ticketNumber = Guid.NewGuid().ToString();
+        ticket.ticketnumber = Guid.NewGuid().ToString();
         ticket.email = incomingTicket.email;
         ticket.name = incomingTicket.name;
         ticket.status = Status.OPENED;

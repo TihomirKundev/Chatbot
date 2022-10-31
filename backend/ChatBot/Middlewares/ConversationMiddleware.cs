@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ChatBot.Services;
 using static ChatBot.Services.MessageService;
 
 namespace ChatBot.Middlewares
@@ -61,7 +59,7 @@ namespace ChatBot.Middlewares
             var wsClient = new WebSocketClient(new User(), webSocket);
             //try
             //{
-                await HandleClient(wsClient);
+            await HandleClient(wsClient);
             //}
             //catch (Exception ex)
             //{
@@ -70,7 +68,7 @@ namespace ChatBot.Middlewares
             //    throw;
             //}
         }
-        
+
         private async Task HandleClient(WebSocketClient webSocket)
         {
             WebSocketClientCollection.Add(webSocket);
@@ -112,7 +110,7 @@ namespace ChatBot.Middlewares
                     }
 
                     var conversation = _conversationService.GetConversationById(convID);
-                    if(conversation is null)
+                    if (conversation is null)
                         _conversationService.CreateNewConversation(convID);
 
                     var participant = _participantService.GetParticipantById(wsclient.Participant.ID);
@@ -124,7 +122,7 @@ namespace ChatBot.Middlewares
                         _logger.LogError($"Client cannot have the Bot's ID: '{Bot.GetChatBotID()}'.");
                         return;
                     }
-                    
+
                     _conversationService.AddParticipantToConversation(participant, convID);
 
 
@@ -153,7 +151,7 @@ namespace ChatBot.Middlewares
                     }
                     // TODO: add global exception handlers to notify client of bad requests
                     try
-                    {  
+                    {
                         _conversationService.AddMessageToConversation(dto, wsclient.ConversationID.Value);
                         _logger.LogInformation($"Saved message to the database.");
                     }
@@ -168,12 +166,12 @@ namespace ChatBot.Middlewares
                     //AI injection
                     if (dto.QuickSelector == QuickSelector.faq)
                     {
-                      string faqAnswer = _aiClientService.getFaqAnswer(dto.Content).Result; //TODO: maybe async
-                       var aiMs =new MessageDTO(){AuthorID = Bot.GetChatBotID(), Content = faqAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot"};
-                       clients.ForEach(c => c.SendMessageAsync(aiMs));
-                       _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
+                        string faqAnswer = _aiClientService.getFaqAnswer(dto.Content).Result; //TODO: maybe async
+                        var aiMs = new MessageDTO() { AuthorID = Bot.GetChatBotID(), Content = faqAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot" };
+                        clients.ForEach(c => c.SendMessageAsync(aiMs));
+                        _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
                     }
-                    
+
                     break;
 
                 case MessageAction.LEAVE:

@@ -1,7 +1,8 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Models;
 using ChatBot.Repositories.Interfaces;
-using MySql.Data.MySqlClient;
+using ChatBot.Repositories.Utils;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,13 +23,13 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            MySqlHelper.ExecuteNonQuery(
+            SqlHelper.ExecuteNonQuery(
                 _connString,
                 "INSERT INTO users(id) " +
                 "VALUES (@id);",
-                new MySqlParameter("@id", user.ID));
+                new SqlParameter("@id", user.ID));
         }
-        catch (MySqlException ex) when (ex.Number == 1062)
+        catch (SqlException ex) when (ex.Number == 1062)
         {
             throw new DuplicateNameException();
         }
@@ -39,7 +40,7 @@ public class UserRepository : IUserRepository
     {
         var users = new List<User>();
 
-        using var reader = MySqlHelper.ExecuteReader(
+        using var reader = SqlHelper.ExecuteReader(
             _connString,
             "SELECT id FROM users WHERE id NOT IN (SELECT id FROM accounts)");
 
@@ -55,15 +56,14 @@ public class UserRepository : IUserRepository
 
     public bool UserExists(Guid id)
     {
-        object result = MySqlHelper.ExecuteScalar(
+        object result = SqlHelper.ExecuteScalar(
             _connString,
             "SELECT 1 FROM users WHERE id = @id",
-            new MySqlParameter("@id", id));
+            new SqlParameter("@id", id));
 
         int status = Convert.ToInt32(result);
 
         return status == 1;
-        
-    }
 
+    }
 }

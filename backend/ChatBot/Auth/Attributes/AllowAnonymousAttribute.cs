@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChatBot.Auth;
+namespace ChatBot.Auth.Attributes;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AllowAnonymousAttribute : Attribute

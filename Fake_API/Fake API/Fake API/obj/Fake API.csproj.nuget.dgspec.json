@@ -1,28 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ra408\\OneDrive\\Работен плот\\Fake API\\Fake API\\Fake API.csproj": {}
+    "C:\\Users\\balsa\\Desktop\\Groupppp\\s3-chat-bot\\Fake_API\\Fake API\\Fake API\\Fake API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ra408\\OneDrive\\Работен плот\\Fake API\\Fake API\\Fake API.csproj": {
+    "C:\\Users\\balsa\\Desktop\\Groupppp\\s3-chat-bot\\Fake_API\\Fake API\\Fake API\\Fake API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ra408\\OneDrive\\Работен плот\\Fake API\\Fake API\\Fake API.csproj",
+        "projectUniqueName": "C:\\Users\\balsa\\Desktop\\Groupppp\\s3-chat-bot\\Fake_API\\Fake API\\Fake API\\Fake API.csproj",
         "projectName": "Fake API",
-        "projectPath": "C:\\Users\\ra408\\OneDrive\\Работен плот\\Fake API\\Fake API\\Fake API.csproj",
-        "packagesPath": "C:\\Users\\ra408\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ra408\\OneDrive\\Работен плот\\Fake API\\Fake API\\obj\\",
+        "projectPath": "C:\\Users\\balsa\\Desktop\\Groupppp\\s3-chat-bot\\Fake_API\\Fake API\\Fake API\\Fake API.csproj",
+        "packagesPath": "C:\\Users\\balsa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\balsa\\Desktop\\Groupppp\\s3-chat-bot\\Fake_API\\Fake API\\Fake API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ra408\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\balsa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {},
-          "https://www.nuget.org/": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {

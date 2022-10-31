@@ -11,11 +11,11 @@ namespace Fake_API.Controllers
     [EnableCors("Development")]
     public class UserController : Controller
     {
-        private UserService userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
-            this.userService = userService;
+            this._userService = userService;
         }
 
         [HttpGet("")]
@@ -23,12 +23,7 @@ namespace Fake_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<User> GetUser(LoginCredentialsDTO loginCredentialsDto)
         {
-            User? user = userService.GetUser(loginCredentialsDto);
-            if(user is null)
-            {
-                return BadRequest("wrong credentials");
-            }
-            return Ok(user);
+            return Ok(_userService.GetUser(loginCredentialsDto));
         }
     }
 }
