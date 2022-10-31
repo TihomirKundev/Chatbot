@@ -15,5 +15,5 @@ public class DbConnection : IDbConnection
         Configuration = configuration;
     }
 
-    public string GetConnectionString() => Configuration.GetConnectionString("BasWorld");
+    public string GetConnectionString() => Configuration.GetConnectionString("DefaultConnection");
 }

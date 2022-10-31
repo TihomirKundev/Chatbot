@@ -1,38 +1,34 @@
 ﻿using ChatBot.Models.DTOs;
 using ChatBot.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers
 {
     [ApiController]
-    [Route("ticket")] //might need [] around ticket
-
+    [Route("ticket")] 
     public class TicketController : ControllerBase
     {
-        private ITicketService _ticketManager;
+        private readonly ITicketService _ticketService;
 
-        public TicketController(ITicketService ticketManager)
+        public TicketController(ITicketService ticketService)
         {
-            _ticketManager = ticketManager;
+            _ticketService = ticketService;
         }
 
         [HttpPost("")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [AllowAnonymous]
         public ActionResult<TicketDTO> Create(TicketCreateDTO ticketReq)
         {
-            TicketDTO ticket = _ticketManager.CreateTicket(ticketReq);
-            return CreatedAtAction(nameof(Create), ticket);
+            return CreatedAtAction(nameof(Create), _ticketService.CreateTicket(ticketReq));
         }
 
         [HttpGet("")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         public ActionResult<TicketDTO[]> GetAll()
         {
-            TicketDTO[] tickets = _ticketManager.GetAllTickets();
-            return Ok(tickets);
+            return Ok(_ticketService.GetAllTickets());
         }
     }
 }
