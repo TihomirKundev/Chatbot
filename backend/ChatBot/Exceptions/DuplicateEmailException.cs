@@ -1,4 +1,4 @@
-﻿namespace ChatBot.Auth.Exception.CustomExceptions;
+﻿namespace ChatBot.Exceptions;
 
 public class DuplicateEmailException : System.Exception
 {

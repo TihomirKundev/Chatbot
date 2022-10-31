@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ChatBot.Exceptions;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using ChatBot.Auth.Exception.CustomExceptions;
-using Microsoft.AspNetCore.Http;
 
-namespace ChatBot.Auth;
+namespace ChatBot.Middlewares;
 
 public class ErrorHandlerMiddleware
 {
@@ -49,10 +49,10 @@ public class ErrorHandlerMiddleware
                     break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;   
+                    break;
             }
         }
     }
 
-    
+
 }

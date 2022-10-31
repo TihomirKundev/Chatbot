@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Net;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace ChatBot.Middlewares;
 
@@ -16,7 +16,7 @@ public class ExceptionMiddleware
         _logger = loggerFactory.CreateLogger<ExceptionMiddleware>();
         _next = next;
     }
-    
+
     public async Task InvokeAsync(HttpContext httpContext)
     {
         try
@@ -44,7 +44,7 @@ public class ExceptionMiddleware
             await context.Response.WriteAsync(string.Empty);
         }
     }
-    
+
     private record ErrorDetails
     {
         public int StatusCode { get; set; } = 500;

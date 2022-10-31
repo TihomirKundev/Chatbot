@@ -4,7 +4,6 @@ using ChatBot.Models.DTOs;
 using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 
 namespace ChatBot.Services;
 
@@ -37,15 +36,15 @@ public class MessageService : IMessageService
 
         if (author is null)
             throw new InvalidMessageException($"No participant exists with such ID: '{dto.AuthorID}'");
-        
-        if(dto.Timestamp is null)
+
+        if (dto.Timestamp is null)
         {
             throw new InvalidMessageException("No timestamp provided.");
         }
 
         DateTime timestamp;
         timestamp = UnixTimeStampToDateTime(dto.Timestamp.Value);
-        
+
         return new Message(author, dto.Content, timestamp);
     }
 

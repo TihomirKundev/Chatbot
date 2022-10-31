@@ -1,10 +1,12 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Models;
 using ChatBot.Repositories.Interfaces;
-using MySql.Data.MySqlClient;
+using ChatBot.Repositories.Utils;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
 
 namespace ChatBot.Repositories;
 
@@ -24,7 +26,7 @@ public class MessageRepository : IMessageRepository
     {
         var messages = new SortedSet<Message>();
 
-        using var connection = new MySqlConnection(_connString);
+        using var connection = new SqlConnection(_connString);
         connection.Open();
 
         // Get all participants
@@ -32,13 +34,13 @@ public class MessageRepository : IMessageRepository
 
         // Get all messages
         string getMessagesQuery = "SELECT id, author_id, content, timestamp FROM messages WHERE conversation_id = @id";
-        using var reader2 = MySqlHelper.ExecuteReader(
+        using var reader2 = SqlHelper.ExecuteReader(
             connection,
             getMessagesQuery,
-            new MySqlParameter("@id", conversationID));
+            new SqlParameter("@id", conversationID));
         while (reader2.Read())
         {
-            var id = reader2.GetInt64("id");
+            var id = reader2.GetInt32("id");
             var authorID = reader2.GetGuid("author_id");
             var content = reader2.GetString("content");
             var timestamp = reader2.GetDateTime("timestamp");
@@ -58,9 +60,9 @@ public class MessageRepository : IMessageRepository
 
     public bool DeleteMessageById(long id)
     {
-        return MySqlHelper.ExecuteNonQuery(_connString,
+        return SqlHelper.ExecuteNonQuery(_connString,
             "DELETE FROM users WHERE id = @id",
-            new MySqlParameter("@id", id))
+            new SqlParameter("@id", id))
             > 0;
     }
 }

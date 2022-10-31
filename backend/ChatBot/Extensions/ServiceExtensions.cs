@@ -20,7 +20,7 @@ public static class ServiceExtensions
 
         var types = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
-            .Where(p => !p.IsInterface && 
+            .Where(p => !p.IsInterface &&
                         (p.IsDefined(scopedService, true) ||
                          p.IsDefined(transientService, true) ||
                          p.IsDefined(singletonService, true) ||
@@ -32,14 +32,14 @@ public static class ServiceExtensions
             }).Where(x => x.Service != null);
 
         services.AddSingleton<IDbConnection, DbConnection>();
-        
+
         foreach (var type in types)
         {
             if (type.Implementation.IsDefined(repository, false))
             {
                 services.AddSingleton(type.Service!, type.Implementation);
             }
-            
+
             if (type.Implementation.IsDefined(scopedService, false))
             {
                 services.AddScoped(type.Service!, type.Implementation);

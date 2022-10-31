@@ -2,7 +2,7 @@
 
 public enum ConversationStatus
 {
-    ONGOING,
-    RESOLVED,
-    UNRESOLVED
+    ONGOING = 0,
+    RESOLVED = 1,
+    UNRESOLVED = 2,
 }

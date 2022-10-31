@@ -1,9 +1,11 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Models;
 using ChatBot.Repositories.Interfaces;
-using MySql.Data.MySqlClient;
+using ChatBot.Repositories.Utils;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ChatBot.Repositories;
 
@@ -41,10 +43,10 @@ public class ParticipantRepository : IParticipantRepository
         var participants = new HashSet<IParticipant>();
 
         string getParticipantIDsQuery = "SELECT user_id FROM conversations_users WHERE conversation_id = @id";
-        using var reader = MySqlHelper.ExecuteReader(
+        using var reader = SqlHelper.ExecuteReader(
             _connString,
             getParticipantIDsQuery,
-            new MySqlParameter("@id", id));
+            new SqlParameter("@id", id));
 
         while (reader.Read())
         {

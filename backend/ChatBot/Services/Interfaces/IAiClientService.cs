@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ChatBot.Services;
+namespace ChatBot.Services.Interfaces;
 
 public interface IAiClientService
 {

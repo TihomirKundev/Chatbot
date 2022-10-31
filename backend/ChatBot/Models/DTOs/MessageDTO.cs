@@ -11,7 +11,7 @@ public record MessageDTO
     public string? Nickname { get; set; }
 
     public long? Timestamp { get; set; }
-    
+
     public MessageAction? Action { get; set; }
 
     public QuickSelector? QuickSelector { get; set; }
@@ -27,5 +27,5 @@ public enum QuickSelector
 {
     faq = 0,
     ts = 1,
-    order = 2 
+    order = 2
 }
