@@ -11,46 +11,50 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+// @ts-ignore
+import bas from '../../images/BAS-World-HQ-0.jpg';
+// @ts-ignore
+import basLogo from '../../images/logo.png';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import userApi from './userApi';
+import {FormHelperText} from "@mui/material";
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const theme = createTheme();
 
-export default function SignInSide() {
-    const handleSubmit = (event) => {
+export default function LoginPage() {
+
+    const [errorMessage, setErrorMessage] = React.useState("");
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const request = {
             email: data.get('email'),
             password: data.get('password'),
         }
-        
-        userApi.login(request).then((response) => {
-            console.log(response.data);
-            if(response.data.role === "ADMIN") {
+        //for demo purposes
+        if(request.email === "admin" && request.password === "admin") {
+            window.location.href = "/admin";
+        }else if(request.email === "customer" && request.password === "customer") {
+            window.location.href = "/customer";
+        }
+
+        //actual implementation, uncomment after demo
+        /*userApi.login(request).then(() => {
+            const user = userApi.getCurrentUser();
+            if(user.role === "ADMIN") {
                 window.location.href = "/admin";
-            }else if(response.data.role === "CUSTOMER") {
-                window.location.href = "/";
-            }
-        });
+            }else if (user.role === "CUSTOMER") {
+                window.location.href = "/customer";
+            }}).catch((error) => {
+            setErrorMessage(error.response.data.message);
+        });*/
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Grid container component="main" sx={{ height: '100vh' }}>
+        <ThemeProvider  theme={theme}>
+            <Grid container component="main" style={{height: '100%'}}>
                 <CssBaseline />
                 <Grid
                     item
@@ -58,15 +62,13 @@ export default function SignInSide() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'url(https://source.unsplash.com/random)',
+                        backgroundImage: `url(${bas})`,
                         backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square >
                     <Box
                         sx={{
                             my: 8,
@@ -76,14 +78,22 @@ export default function SignInSide() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
+                        <Box
+                            sx={{
+                                height: '3vh',
+                                width: '40%',
+                                backgroundImage: `url(${basLogo})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat'
+                            }}>
+                        </Box>
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1}}>
                             <TextField
+                                color="success"
                                 margin="normal"
                                 required
                                 fullWidth
@@ -94,6 +104,7 @@ export default function SignInSide() {
                                 autoFocus
                             />
                             <TextField
+                                color="success"
                                 margin="normal"
                                 required
                                 fullWidth
@@ -103,31 +114,27 @@ export default function SignInSide() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            />
+                            <Box sx={{mt: 3, display: 'flex', justifyContent: 'center'}}>
+                                <FormHelperText error>
+                                    {errorMessage}
+                                </FormHelperText>
+                            </Box>
                             <Button
+                                color="success"
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                sx={{ mt: 3, mb: 2}}
                             >
                                 Sign In
                             </Button>
                             <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href="/register" variant="body2">
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>
                             </Grid>
-                            <Copyright sx={{ mt: 5 }} />
                         </Box>
                     </Box>
                 </Grid>
