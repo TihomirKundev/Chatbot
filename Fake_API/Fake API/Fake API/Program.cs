@@ -1,4 +1,7 @@
+using ChatBot.Auth;
+using Fake_API.DAL.Repository;
 using Fake_API.Service;
+using FakeAPI.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +19,8 @@ builder.Services.AddSwaggerGen();
 //             policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
 //         });
 // });
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 
 
@@ -39,11 +43,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 app.UseCors("Development");
 app.UseAuthorization();
-
 app.MapControllers();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.Run();

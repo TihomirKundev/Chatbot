@@ -8,10 +8,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Fake_API.DAL.Repository;
 
 namespace FakeAPI.DAL
-{
-    public class DALUser
+{   
+    public class UserRepository : IUserRepository
     {
         public User CheckAndGetUSer(string email, string password)
         {
