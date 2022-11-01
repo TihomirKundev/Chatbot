@@ -5,7 +5,7 @@ namespace ChatBot.Auth.Jwt
 {
     public interface IJwtUtils
     {
-        string GenerateToken(Account account);
+        string GenerateToken(User account);
         Guid? ValidateToken(string token);
     }
 }

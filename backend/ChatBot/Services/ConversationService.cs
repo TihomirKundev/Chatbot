@@ -39,9 +39,9 @@ public class ConversationService : IConversationService
         _conversationRepo.SaveMessageToConversation(message, conversationID);
     }
 
-    public void AddParticipantToConversation(IParticipant participant, Guid conversationID)
+    public void AddParticipantToConversation(Guid participantID, Guid conversationID)
     {
-        _conversationRepo.AddParticipantToConversation(participant.ID, conversationID);
+        _conversationRepo.AddParticipantToConversation(participantID, conversationID);
     }
 
     public void SetConversationStatus(Guid conversationID, ConversationStatus status)

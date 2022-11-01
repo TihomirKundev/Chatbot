@@ -6,14 +6,15 @@ using ChatBot.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using ChatBot.Repositories.Utils;
 
-namespace ChatBot.Repositories.Utils;
+namespace ChatBot.Repositories;
 
 [Repository]
 public class TicketRepository : ITicketRepository
 {
     private readonly string _connString;
-    
+
     public TicketRepository(IDbConnection dbc)
     {
         _connString = dbc.GetConnectionString();
@@ -23,7 +24,7 @@ public class TicketRepository : ITicketRepository
     {
         string query = "INSERT INTO tickets (id, email, name, status) VALUES (@id, @email, @name, @status)";
 
-        SqlHelper.ExecuteNonQuery(_connString, query, 
+        SqlHelper.ExecuteNonQuery(_connString, query,
             new SqlParameter("@id", ticket.ticketnumber),
                 new SqlParameter("@email", ticket.email),
                 new SqlParameter("@name", ticket.name),
@@ -33,9 +34,9 @@ public class TicketRepository : ITicketRepository
     public TicketDTO[] GetAll()
     {
         var tickets = new List<TicketDTO>();
-        
+
         string query = "SELECT id, name , email, status FROM tickets";
-        
+
         using var reader = SqlHelper.ExecuteReader(_connString, query);
 
         if (!reader.HasRows)

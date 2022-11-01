@@ -9,13 +9,13 @@ namespace ChatBot.Models
 {
     public class WebSocketClient
     {
-        public WebSocketClient(IParticipant participant, WebSocket webSocket)
+        public WebSocketClient(Guid id, WebSocket webSocket)
         {
-            Participant = participant;
+            ID = id;
             WebSocket = webSocket;
         }
 
-        public IParticipant Participant { get; }
+        public Guid ID { get; }
 
         public WebSocket WebSocket { get; }
 

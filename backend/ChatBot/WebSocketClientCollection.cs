@@ -25,16 +25,16 @@ namespace ChatBot
 
         public static bool Add(WebSocketClient client)
         {
-            if (!_clients.TryGetValue(client.Participant.ID, out _))
+            if (!_clients.TryGetValue(client.ID, out _))
             {
-                _clients.Add(client.Participant.ID, client);
+                _clients.Add(client.ID, client);
                 return true;
             }
             return false;
         }
         public static bool Remove(WebSocketClient client)
         {
-            return _clients.Remove(client.Participant.ID);
+            return _clients.Remove(client.ID);
         }
     }
 }

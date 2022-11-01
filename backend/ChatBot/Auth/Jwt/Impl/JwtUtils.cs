@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace ChatBot.Auth.Jwt;
+namespace ChatBot.Auth.Jwt.Impl;
 
 [TransientService]
 public class JwtUtils : IJwtUtils
@@ -20,7 +20,7 @@ public class JwtUtils : IJwtUtils
         _appSettings = appSettings.Value;
     }
 
-    public string GenerateToken(Account account)
+    public string GenerateToken(User account)
     {
         //token generation logic, valid for 1 day, who doesnt like can change it to more/less
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -6,7 +6,12 @@ namespace ChatBot.Services.Interfaces
 {
     public interface IUserService
     {
-        User? CreateNewUser(Guid id);
-        List<User> GetAllUsers();
+        User? GetById(Guid id);
+        
+        User? GetByEmail(string email);
+        
+        ISet<User> GetAllUsers();
+        
+        ISet<IParticipant> GetParticipantsByConversationID(Guid conversationID);
     }
 }

@@ -8,7 +8,7 @@ namespace ChatBot.Services.Interfaces
     public interface IConversationService
     {
         void AddMessageToConversation(MessageDTO messageDTO, Guid conversationID);
-        void AddParticipantToConversation(IParticipant participant, Guid conversationID);
+        void AddParticipantToConversation(Guid participantID, Guid conversationID);
         Conversation CreateNewConversation(Guid id);
         Conversation? GetConversationById(Guid id);
         void SetConversationStatus(Guid conversationID, ConversationStatus status);

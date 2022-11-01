@@ -12,17 +12,17 @@ namespace ChatBot.Services;
 public class AuthService : IAuthService
 {
     private readonly IJwtUtils _utils;
-    private readonly IAccountRepository _accountRepo;
+    private readonly IUserService _userService;
 
-    public AuthService(IJwtUtils utils, IAccountRepository accountRepo)
+    public AuthService(IJwtUtils utils, IUserService userService)
     {
         _utils = utils;
-        _accountRepo = accountRepo;
+        _userService = userService;
     }
 
     public AuthenticateResponse Authenticate(AuthenticateRequest request)
     {
-        var account = _accountRepo.GetByEmail(request.Email); //change to http call to fake api
+        var account = _userService.GetByEmail(request.Email);
 
         if (account == null || !BCrypt.Net.BCrypt.Verify(request.Password, account.Password))
             throw new InvalidCredentialsException("Invalid credentials");

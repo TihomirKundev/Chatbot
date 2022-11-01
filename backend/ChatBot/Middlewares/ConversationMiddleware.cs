@@ -19,23 +19,17 @@ namespace ChatBot.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private readonly IConversationService _conversationService;
-        private readonly IParticipantService _participantService;
-        private readonly IUserService _userService;
         private readonly IAiClientService _aiClientService;
 
         public ConversationMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IConversationService conversationService,
-            IParticipantService participantService,
-            IUserService userService,
             IAiClientService aiClientService)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<ConversationMiddleware>();
             _conversationService = conversationService;
-            _participantService = participantService;
-            _userService = userService;
             _aiClientService = aiClientService;
         }
 
@@ -51,22 +45,12 @@ namespace ChatBot.Middlewares
                 context.Response.StatusCode = 404;
                 return;
             }
+            
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-            // !! Everyone so far will be an anonymous guy,
-            // when authenticatio & authorization is done, this needs to be refactored
-            // using AccountService
-            var wsClient = new WebSocketClient(new User(), webSocket);
-            //try
-            //{
+            
+            var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
+            
             await HandleClient(wsClient);
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex, $"Echo websocket client {wsClient.Participant.ID} error.");
-            //    await context.Response.WriteAsync("closed");
-            //    throw;
-            //}
         }
 
         private async Task HandleClient(WebSocketClient webSocket)
@@ -83,7 +67,7 @@ namespace ChatBot.Middlewares
                 {
                     var messageJSON = Encoding.UTF8.GetString(buffer);
                     var message = JsonConvert.DeserializeObject<MessageDTO>(messageJSON);
-                    message.AuthorID = webSocket.Participant.ID;
+                    message.AuthorID = webSocket.ID;
                     HandleMessage(message);
                 }
             }
@@ -112,33 +96,24 @@ namespace ChatBot.Middlewares
                     var conversation = _conversationService.GetConversationById(convID);
                     if (conversation is null)
                         _conversationService.CreateNewConversation(convID);
+                    
 
-                    var participant = _participantService.GetParticipantById(wsclient.Participant.ID);
-                    if (participant is null)
-                        participant = _userService.CreateNewUser(wsclient.Participant.ID);
-
-                    if (participant is null)
-                    {
-                        _logger.LogError($"Client cannot have the Bot's ID: '{Bot.GetChatBotID()}'.");
-                        return;
-                    }
-
-                    _conversationService.AddParticipantToConversation(participant, convID);
+                    _conversationService.AddParticipantToConversation(wsclient.ID, convID);
 
 
                     if (wsclient.ConversationID is null)
                     {
-                        _logger.LogInformation($"Client '{wsclient.Participant.ID}' joined conversation with ID: '{convID}'");
+                        _logger.LogInformation($"Client '{wsclient.ID}' joined conversation with ID: '{convID}'");
 
                     }
                     else if (wsclient.ConversationID == convID)
                     {
-                        _logger.LogWarning($"Client ID: '{wsclient.Participant.ID}' tried joining a conversation they are already in with ID: '{convID}'");
+                        _logger.LogWarning($"Client ID: '{wsclient.ID}' tried joining a conversation they are already in with ID: '{convID}'");
                         return;
                     }
                     else
                     {
-                        _logger.LogInformation($"Client ID: '{wsclient.Participant.ID}' switched to conversation ID: '{convID}'");
+                        _logger.LogInformation($"Client ID: '{wsclient.ID}' switched to conversation ID: '{convID}'");
                     }
                     wsclient.ConversationID = convID;
                     break;

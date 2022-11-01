@@ -12,7 +12,7 @@ public class AuthenticateResponse
     public string Role { get; set; }
     public string Token { get; set; }
 
-    public AuthenticateResponse(Account user, string token)
+    public AuthenticateResponse(User user, string token)
     {
         Id = user.ID.ToString();
         FirstName = user.FirstName;

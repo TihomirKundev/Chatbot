@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
+using ChatBot.Services.Interfaces;
 
 namespace ChatBot.Repositories;
 
@@ -14,12 +15,12 @@ namespace ChatBot.Repositories;
 public class MessageRepository : IMessageRepository
 {
     private readonly string _connString;
-    private readonly IParticipantRepository _participantRepo;
+    private readonly IUserService _userService;
 
-    public MessageRepository(IDbConnection dbc, IParticipantRepository participantRepo)
+    public MessageRepository(IDbConnection dbc, IUserService userService)
     {
         _connString = dbc.GetConnectionString();
-        _participantRepo = participantRepo;
+        _userService = userService;
     }
 
     public SortedSet<Message> GetAllMessagesByConversationID(Guid conversationID)
@@ -28,9 +29,9 @@ public class MessageRepository : IMessageRepository
 
         using var connection = new SqlConnection(_connString);
         connection.Open();
-
+        
         // Get all participants
-        var participants = _participantRepo.GetParticipantsByConversationID(conversationID);
+        var participants = _userService.GetParticipantsByConversationID(conversationID);
 
         // Get all messages
         string getMessagesQuery = "SELECT id, author_id, content, timestamp FROM messages WHERE conversation_id = @id";

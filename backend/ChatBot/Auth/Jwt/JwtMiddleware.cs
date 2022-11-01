@@ -1,7 +1,10 @@
-﻿using ChatBot.Services;
+﻿using ChatBot.Auth.Jwt.Impl;
+using ChatBot.Services;
+using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace ChatBot.Auth.Jwt;
@@ -15,7 +18,7 @@ public class JwtMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, AccountService accountService, JwtUtils jwtUtils)
+    public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
     {
         //get token, split bearer
         var token = context.Request.Headers["Authentication"]
@@ -29,7 +32,14 @@ public class JwtMiddleware
         //attach user to context on successful jwt validation
         //might break due to guid
         if (userId is not null)
-            context.Items["User"] = accountService.GetById(userId.Value);
+        {
+            var user = userService.GetById(userId.Value);
+
+            if (user is not null)
+                context.Items["UserID"] = user.ID;
+            else
+                throw new AuthenticationException();
+        }
 
         await _next(context);
     }

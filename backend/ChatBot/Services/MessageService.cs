@@ -13,14 +13,14 @@ public class MessageService : IMessageService
 {
     private readonly IMessageRepository _messageRepo;
 
-    private readonly IParticipantService _participantService;
+    private readonly IUserService _userService;
 
     public MessageService(
         IMessageRepository messageRepository,
-        IParticipantService participantService)
+        IUserService userService)
     {
         _messageRepo = messageRepository;
-        _participantService = participantService;
+        _userService = userService;
     }
 
 
@@ -32,7 +32,7 @@ public class MessageService : IMessageService
         if (string.IsNullOrWhiteSpace(dto.Content))
             throw new InvalidMessageException("Message content cannot be empty.");
 
-        IParticipant? author = _participantService.GetParticipantById(dto.AuthorID);
+        IParticipant? author = _userService.GetById(dto.AuthorID);
 
         if (author is null)
             throw new InvalidMessageException($"No participant exists with such ID: '{dto.AuthorID}'");

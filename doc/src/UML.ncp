@@ -5,9 +5,9 @@
     <Language>CSharp</Language>
     <Entities>
       <Entity type="Class">
-        <Name>Account</Name>
+        <Name>User</Name>
         <Access>Public</Access>
-        <Location left="332" top="714" />
+        <Location left="317" top="576" />
         <Size width="163" height="162" />
         <Collapsed>False</Collapsed>
         <Member type="Property">public string FirstName { get; }</Member>
@@ -20,7 +20,7 @@
       <Entity type="Enum">
         <Name>Role</Name>
         <Access>Public</Access>
-        <Location left="46" top="746" />
+        <Location left="45" top="590" />
         <Size width="163" height="95" />
         <Collapsed>False</Collapsed>
         <Value>CUSTOMER</Value>
@@ -56,14 +56,6 @@
         <Value>ONGOING</Value>
         <Value>RESOLVED</Value>
         <Value>UNRESOLVED</Value>
-      </Entity>
-      <Entity type="Class">
-        <Name>User</Name>
-        <Access>Public</Access>
-        <Location left="332" top="576" />
-        <Size width="163" height="94" />
-        <Collapsed>True</Collapsed>
-        <Modifier>None</Modifier>
       </Entity>
       <Entity type="Interface">
         <Name>IParticipant</Name>
@@ -103,26 +95,18 @@
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
-      <Relationship type="Generalization" first="0" second="5">
+      <Relationship type="Realization" first="6" second="5">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
       </Relationship>
-      <Relationship type="Realization" first="7" second="6">
-        <StartOrientation>Vertical</StartOrientation>
-        <EndOrientation>Vertical</EndOrientation>
-      </Relationship>
-      <Relationship type="Realization" first="5" second="6">
-        <StartOrientation>Horizontal</StartOrientation>
-        <EndOrientation>Horizontal</EndOrientation>
-      </Relationship>
-      <Relationship type="Association" first="2" second="6">
+      <Relationship type="Association" first="2" second="5">
         <Label>Author</Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
       </Relationship>
-      <Relationship type="Association" first="3" second="6">
+      <Relationship type="Association" first="3" second="5">
         <Label>List of participants</Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
@@ -145,9 +129,13 @@
         <StartMultiplicity>1</StartMultiplicity>
         <EndMultiplicity>*</EndMultiplicity>
       </Relationship>
-      <Relationship type="Comment" first="8" second="7">
+      <Relationship type="Comment" first="7" second="6">
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="0" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
       </Relationship>
     </Relationships>
   </ProjectItem>

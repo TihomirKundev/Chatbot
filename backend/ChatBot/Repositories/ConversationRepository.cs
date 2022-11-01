@@ -3,6 +3,7 @@ using ChatBot.Models;
 using ChatBot.Models.Enums;
 using ChatBot.Repositories.Interfaces;
 using ChatBot.Repositories.Utils;
+using ChatBot.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Data;
@@ -14,13 +15,13 @@ public class ConversationRepository : IConversationRepository
 {
     private readonly string _connString;
     private readonly IMessageRepository _messageRepo;
-    private readonly IParticipantRepository _participantRepo;
+    private readonly IUserService _userService;
 
-    public ConversationRepository(IDbConnection dbc, IMessageRepository messageRepo, IParticipantRepository participantRepo)
+    public ConversationRepository(IDbConnection dbc, IMessageRepository messageRepo, IUserService userService)
     {
         _connString = dbc.GetConnectionString();
         _messageRepo = messageRepo;
-        _participantRepo = participantRepo;
+        _userService = userService;
     }
 
     public void SaveMessageToConversation(Message message, Guid conversationId)
@@ -73,10 +74,11 @@ public class ConversationRepository : IConversationRepository
 
         if (!reader.HasRows)
             return null;
+        
         reader.Read();
         var status = (ConversationStatus)reader.GetInt32("status");
         var messages = _messageRepo.GetAllMessagesByConversationID(id);
-        var participants = _participantRepo.GetParticipantsByConversationID(id);
+        var participants = _userService.GetParticipantsByConversationID(id);
 
         return new Conversation(id, status, messages, participants);
     }

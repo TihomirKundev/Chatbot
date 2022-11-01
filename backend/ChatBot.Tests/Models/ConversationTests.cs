@@ -1,6 +1,5 @@
 ﻿using ChatBot.Models;
 using ChatBot.Models.Enums;
-
 namespace ChatBot.Tests.Models;
 
 public class ConversationTests
@@ -8,7 +7,7 @@ public class ConversationTests
     [Test]
     public void SortedSet_FirstMessage()
     {
-        var author = new User();
+        var author = new User(Guid.NewGuid(), "Namey", "Name", "email", "phone", "password", 0);
         var time = DateTime.Now;
         var convo = new Conversation(Guid.NewGuid());
 
@@ -26,7 +25,8 @@ public class ConversationTests
     [Test]
     public void SortedSet_LastMessage_Ended_Conversation()
     {
-        var author = new User();
+        var author = new User(Guid.NewGuid(), "Namey", "Name", "email", "phone", "password", 0);
+
         var time = DateTime.Now;
         var convo = new Conversation(Guid.NewGuid());
 
@@ -45,7 +45,7 @@ public class ConversationTests
     [Test]
     public void SortedSet_LastMessage_Ongoing_Conversation()
     {
-        var author = new User();
+        var author = new User(Guid.NewGuid(), "Namey", "Name", "email", "phone", "password", 0);
         var time = DateTime.Now;
         var convo = new Conversation(Guid.NewGuid());
 
