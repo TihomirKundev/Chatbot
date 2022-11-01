@@ -8,12 +8,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using ChatBot.Repositories.Utils;
 using Fake_API.DAL.Repository;
 
 namespace FakeAPI.DAL
 {   
     public class UserRepository : IUserRepository
     {
+        private readonly string connString =
+            "Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            
         public User CheckAndGetUSer(string email, string password)
         {
             User user = new User();
@@ -30,6 +34,102 @@ namespace FakeAPI.DAL
                 return GetUser(email);
             }
         }
+
+        public User? GetByEmail(string email)
+        {
+            string query = 
+                "SELECT id, email, first_name, last_name, password, phone, company_id " +
+                "FROM [user] " +
+                "WHERE email = @Email";
+            
+            using var rdr = SqlHelper.ExecuteReader(
+                connString, 
+                query, 
+                new SqlParameter("@Email", email));
+            
+            while(rdr.Read())
+            {
+                Company company = GetCompany(rdr.GetInt32("company_id"));
+                List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+
+                return new User(
+                    Guid.Parse(rdr.GetString("id")), 
+                    rdr.GetString("first_name"), 
+                    rdr.GetString("last_name"),
+                    rdr.GetString("email"),
+                    rdr.GetString("password"),
+                    rdr.GetString("phone"),
+                    Role.Customer, //fix?
+                    company,
+                    orders
+                    );
+            }
+            return null;
+        }
+
+        public User? GetById(Guid id)
+        {
+            var query = 
+                "SELECT id, email, first_name, last_name, password, phone, company_id " +
+                "FROM [user] " +
+                "WHERE id = @Id";
+            
+            using var rdr = SqlHelper.ExecuteReader(
+                connString, 
+                query, 
+                new SqlParameter("@Id", id));
+
+            if (!rdr.Read())
+                return null;
+
+            Company company = GetCompany(rdr.GetInt32("company_id"));
+            List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+
+            return new User(
+                Guid.Parse(rdr.GetString("id")), 
+                rdr.GetString("first_name"),
+                rdr.GetString("last_name"),
+                rdr.GetString("email"),
+                rdr.GetString("password"),
+                rdr.GetString("phone"),
+                Role.Customer, //fix?
+                company, orders);
+           
+        }
+
+        public List<User> GetAll()
+        {
+            List<User> userList = new List<User>();
+            
+            var query = "SELECT id, email, first_name, last_name, password, phone, company_id FROM [user]";
+            
+            using var rdr = SqlHelper.ExecuteReader(
+                connString, query);
+
+            if (!rdr.HasRows)
+                return userList;
+
+            while (rdr.Read())
+            {
+                Company company = GetCompany(rdr.GetInt32("company_id"));
+                List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+                
+                User user = new User(
+                    Guid.Parse(rdr.GetString("id")), 
+                    rdr.GetString("first_name"), 
+                    rdr.GetString("last_name"),
+                    rdr.GetString("email"),
+                    rdr.GetString("password"),
+                    rdr.GetString("phone"),
+                    Role.Customer, //fix?
+                    company,
+                    orders
+                );    
+                userList.Add(user);
+            }
+            return userList;
+        }
+
         private User GetUser(string email)
         {
             User user = new User();
@@ -41,6 +141,7 @@ namespace FakeAPI.DAL
             adapter.Fill(dataTable);
             foreach(DataRow dr in dataTable.Rows)
             {
+                Guid id = Guid.Parse(dr["id"].ToString());
                 String firstName = Convert.ToString(dr["first_name"]);
                 String lastName = Convert.ToString(dr["last_name"]);
                 String password = Convert.ToString(dr["password"]);
@@ -48,7 +149,7 @@ namespace FakeAPI.DAL
                 Role role = Role.Customer;
                 Company company = GetCompany(Convert.ToInt32(dr["company_id"]));
                 List<Order> orders = GetOrdersForUser(email);
-                user = new User(firstName, lastName, email, password, phone, role, company, orders);
+                user = new User(id, firstName, lastName, email, password, phone, role, company, orders);
             }
             conn.Close();
             return user;
