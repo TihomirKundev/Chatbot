@@ -45,11 +45,11 @@ namespace ChatBot.Middlewares
                 context.Response.StatusCode = 404;
                 return;
             }
-            
+
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            
+
             var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
-            
+
             await HandleClient(wsClient);
         }
 
@@ -96,7 +96,7 @@ namespace ChatBot.Middlewares
                     var conversation = _conversationService.GetConversationById(convID);
                     if (conversation is null)
                         _conversationService.CreateNewConversation(convID);
-                    
+
 
                     _conversationService.AddParticipantToConversation(wsclient.ID, convID);
 
@@ -144,6 +144,7 @@ namespace ChatBot.Middlewares
                         string faqAnswer = _aiClientService.getFaqAnswer(dto.Content).Result; //TODO: maybe async
                         var aiMs = new MessageDTO() { AuthorID = Bot.GetChatBotID(), Content = faqAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot" };
                         clients.ForEach(c => c.SendMessageAsync(aiMs));
+                        _conversationService.AddMessageToConversation(aiMs, wsclient.ConversationID.Value);
                         _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
                     }
 

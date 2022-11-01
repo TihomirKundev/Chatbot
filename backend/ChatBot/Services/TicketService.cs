@@ -1,10 +1,8 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Models.DTOs;
+using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using ChatBot.Exceptions;
-using ChatBot.Repositories.Interfaces;
 
 namespace ChatBot.Services;
 
@@ -22,16 +20,16 @@ public class TicketService : ITicketService
     {
         var ticket = new TicketDTO()
         {
-            ticketnumber = Guid.NewGuid().ToString(), 
+            ticketnumber = Guid.NewGuid().ToString(),
             name = incomingTicket.name,
             email = incomingTicket.email,
-            status = Status.OPENED 
+            status = Status.OPENED
         };
-     
+
         _ticketRepository.SaveTicket(ticket);
         return ticket;
     }
 
     public TicketDTO[] GetAllTickets() => _ticketRepository.GetAll();
-    
+
 }

@@ -1,12 +1,11 @@
 using ChatBot.Auth.Jwt;
 using ChatBot.Extensions;
+using ChatBot.Http;
 using ChatBot.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using ChatBot.Http;
-using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,9 +40,9 @@ app.UseEndpoints(endpoint => { endpoint.MapControllers(); });
 
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(60), });
 
- 
+
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseMiddleware<JwtMiddleware>(); 
+app.UseMiddleware<JwtMiddleware>();
 app.UseMiddleware<ConversationMiddleware>();
 
 app.Run();

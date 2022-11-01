@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ChatBot.Models.DTOs;
 
 namespace ChatBot.Repositories.Interfaces;

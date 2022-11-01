@@ -1,12 +1,9 @@
-using System.Threading.Tasks;
 using ChatBot.Auth.Jwt;
 using ChatBot.Exceptions;
 using ChatBot.Extensions;
 using ChatBot.Http;
-using ChatBot.Models;
 using ChatBot.Models.Request;
 using ChatBot.Models.Response;
-using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 
 namespace ChatBot.Services;

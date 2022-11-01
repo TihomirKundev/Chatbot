@@ -1,16 +1,13 @@
+using ChatBot.Exceptions;
+using ChatBot.Models;
+using ChatBot.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ChatBot.Exceptions;
-using ChatBot.Http.Requests;
-using ChatBot.Models;
-using ChatBot.Models.Request;
 using Fake_API.Entities.DTO;
 
 namespace ChatBot.Http;
@@ -39,7 +36,7 @@ public class FakeApiHttpClient : IFakeApiHttpClient
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
             var userDto = JsonSerializer.Deserialize<User>(responseContent,
-                new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             return new User(userDto.ID, //trust the process
                 userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);

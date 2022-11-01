@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ChatBot.Http.Requests;
 using ChatBot.Models;
 using ChatBot.Models.Request;
 

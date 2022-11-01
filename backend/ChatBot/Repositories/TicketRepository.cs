@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
 using ChatBot.Extensions;
 using ChatBot.Models.DTOs;
 using ChatBot.Repositories.Interfaces;
+using ChatBot.Repositories.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using System.Data;
-using ChatBot.Repositories.Utils;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace ChatBot.Repositories;
 

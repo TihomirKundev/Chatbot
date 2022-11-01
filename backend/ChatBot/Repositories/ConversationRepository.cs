@@ -7,7 +7,9 @@ using ChatBot.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace ChatBot.Repositories;
 
@@ -66,6 +68,8 @@ public class ConversationRepository : IConversationRepository
             new SqlParameter("@user_id", participantID));
     }
 
+
+
     public Conversation? GetConversationByID(Guid id)
     {
         using var reader = SqlHelper.ExecuteReader(
@@ -75,13 +79,39 @@ public class ConversationRepository : IConversationRepository
 
         if (!reader.HasRows)
             return null;
-        
+
         reader.Read();
         var status = (ConversationStatus)reader.GetInt32("status");
         var messages = _messageRepo.GetAllMessagesByConversationID(id);
-        var participants = _userService.GetParticipantsByConversationID(id);
+        var participants = GetParticipantsByConversationID(id);
 
         return new Conversation(id, status, messages, participants);
+    }
+
+    private ISet<IParticipant> GetParticipantsByConversationID(Guid id)
+    {
+        var participants = new HashSet<IParticipant>();
+        
+        using var reader = SqlHelper.ExecuteReader(
+            _connString,
+            "SELECT user_id FROM conversations_users WHERE conversation_id = @id;",
+            new SqlParameter("@id", id));
+
+        if (!reader.HasRows)
+            return participants;
+
+        // TODO: refactor to get only required users
+        var users = _userService.GetAllUsers().ToDictionary(u => u.ID, u => (IParticipant)u);
+        users.Add(Bot.GetChatBotID(), new Bot());
+
+        while(reader.Read())
+        {
+            if (!users.TryGetValue(reader.GetGuid("user_id"), out var user))
+                continue;
+            participants.Add(user);
+        }
+        
+        return participants;
     }
 
     public void CreateConversation(Conversation conversation)
