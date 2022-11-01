@@ -5,6 +5,7 @@ using ChatBot.Repositories.Interfaces;
 using ChatBot.Repositories.Utils;
 using ChatBot.Services.Interfaces;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Data;
 
@@ -17,9 +18,9 @@ public class ConversationRepository : IConversationRepository
     private readonly IMessageRepository _messageRepo;
     private readonly IUserService _userService;
 
-    public ConversationRepository(IDbConnection dbc, IMessageRepository messageRepo, IUserService userService)
+    public ConversationRepository(IConfiguration config, IMessageRepository messageRepo, IUserService userService)
     {
-        _connString = dbc.GetConnectionString();
+        _connString = config.GetConnectionString("DefaultConnection");
         _messageRepo = messageRepo;
         _userService = userService;
     }

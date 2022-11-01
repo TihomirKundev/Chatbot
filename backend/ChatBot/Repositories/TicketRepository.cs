@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using ChatBot.Repositories.Utils;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatBot.Repositories;
 
@@ -15,9 +16,9 @@ public class TicketRepository : ITicketRepository
 {
     private readonly string _connString;
 
-    public TicketRepository(IDbConnection dbc)
+    public TicketRepository(IConfiguration config)
     {
-        _connString = dbc.GetConnectionString();
+        _connString = config.GetConnectionString("DefaultConnection");
     }
 
     public void SaveTicket(TicketDTO ticket)

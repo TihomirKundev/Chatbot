@@ -30,8 +30,7 @@ public static class ServiceExtensions
                 Service = s.GetInterface($"I{s.Name}"),
                 Implementation = s
             }).Where(x => x.Service != null);
-
-        services.AddSingleton<IDbConnection, DbConnection>();
+        
 
         foreach (var type in types)
         {

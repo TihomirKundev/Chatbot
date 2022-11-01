@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using ChatBot.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatBot.Repositories;
 
@@ -17,9 +18,9 @@ public class MessageRepository : IMessageRepository
     private readonly string _connString;
     private readonly IUserService _userService;
 
-    public MessageRepository(IDbConnection dbc, IUserService userService)
+    public MessageRepository(IConfiguration config, IUserService userService)
     {
-        _connString = dbc.GetConnectionString();
+        _connString = config.GetConnectionString("DefaultConnection");
         _userService = userService;
     }
 
