@@ -45,11 +45,11 @@ namespace ChatBot.Middlewares
                 context.Response.StatusCode = 404;
                 return;
             }
-            
+
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            
+
             var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
-            
+
             await HandleClient(wsClient);
         }
 
@@ -96,7 +96,7 @@ namespace ChatBot.Middlewares
                     var conversation = _conversationService.GetConversationById(convID);
                     if (conversation is null)
                         _conversationService.CreateNewConversation(convID);
-                    
+
 
                     _conversationService.AddParticipantToConversation(wsclient.ID, convID);
 

@@ -7,11 +7,11 @@ namespace ChatBot.Services.Interfaces
     public interface IUserService
     {
         User? GetById(Guid id);
-        
+
         User? GetByEmail(string email);
-        
+
         ISet<User> GetAllUsers();
-        
+
         ISet<IParticipant> GetParticipantsByConversationID(Guid conversationID);
     }
 }

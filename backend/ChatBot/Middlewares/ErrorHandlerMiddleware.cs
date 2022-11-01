@@ -4,11 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ChatBot.Middlewares;
 public class ErrorHandlerMiddleware
@@ -33,18 +28,18 @@ public class ErrorHandlerMiddleware
 
             response.StatusCode = ex switch
             {
-                AggregateException or 
-                KeyNotFoundException or 
-                TokenNotFoundException or 
-                UserNotFoundException 
+                AggregateException or
+                KeyNotFoundException or
+                TokenNotFoundException or
+                UserNotFoundException
                     => (int)HttpStatusCode.NotFound,
-                    
+
                 FormatException or
-                ArgumentNullException or 
-                DuplicateEmailException or 
-                InvalidCredentialsException 
+                ArgumentNullException or
+                DuplicateEmailException or
+                InvalidCredentialsException
                     => (int)HttpStatusCode.BadRequest,
-                    
+
                 _ => (int)HttpStatusCode.InternalServerError,
             };
 

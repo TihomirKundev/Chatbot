@@ -1,6 +1,6 @@
+using ChatBot.Models.Enums;
 using System;
 using System.Collections.Generic;
-using ChatBot.Models.Enums;
 
 namespace ChatBot.Models.DTOs;
 

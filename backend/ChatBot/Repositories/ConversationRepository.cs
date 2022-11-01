@@ -75,7 +75,7 @@ public class ConversationRepository : IConversationRepository
 
         if (!reader.HasRows)
             return null;
-        
+
         reader.Read();
         var status = (ConversationStatus)reader.GetInt32("status");
         var messages = _messageRepo.GetAllMessagesByConversationID(id);

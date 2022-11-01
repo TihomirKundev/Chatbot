@@ -1,13 +1,12 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Models;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 
 namespace ChatBot.Auth.Jwt.Impl;
 
@@ -15,12 +14,12 @@ namespace ChatBot.Auth.Jwt.Impl;
 public class JwtUtils : IJwtUtils
 {
     IConfiguration _configuration;
-    
+
     public JwtUtils(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-    
+
 
     public string GenerateToken(User account)
     {

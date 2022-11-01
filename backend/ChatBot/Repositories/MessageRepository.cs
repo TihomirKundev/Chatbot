@@ -2,13 +2,13 @@
 using ChatBot.Models;
 using ChatBot.Repositories.Interfaces;
 using ChatBot.Repositories.Utils;
+using ChatBot.Services.Interfaces;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using ChatBot.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace ChatBot.Repositories;
 
@@ -30,7 +30,7 @@ public class MessageRepository : IMessageRepository
 
         using var connection = new SqlConnection(_connString);
         connection.Open();
-        
+
         // Get all participants
         var participants = _userService.GetParticipantsByConversationID(conversationID);
 

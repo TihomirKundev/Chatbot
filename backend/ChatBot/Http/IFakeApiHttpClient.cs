@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
-using ChatBot.Http.Requests;
 using ChatBot.Models;
 using ChatBot.Models.Request;
+using System.Threading.Tasks;
 
 namespace ChatBot.Http;
 

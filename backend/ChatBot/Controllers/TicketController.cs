@@ -1,13 +1,12 @@
 ﻿using ChatBot.Models.DTOs;
 using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers
 {
     [ApiController]
-    [Route("ticket")] 
+    [Route("ticket")]
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;

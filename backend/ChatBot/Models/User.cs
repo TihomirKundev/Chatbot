@@ -7,7 +7,7 @@ namespace ChatBot.Models;
 public class User : IParticipant
 {
     public Guid ID { get; }
-    
+
     public User(Guid id,
                 string firstName,
                 string lastName,

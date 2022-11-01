@@ -1,5 +1,4 @@
-﻿using ChatBot.Repositories;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
@@ -30,7 +29,7 @@ public static class ServiceExtensions
                 Service = s.GetInterface($"I{s.Name}"),
                 Implementation = s
             }).Where(x => x.Service != null);
-        
+
 
         foreach (var type in types)
         {
