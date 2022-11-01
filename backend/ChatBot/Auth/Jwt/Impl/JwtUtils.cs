@@ -1,5 +1,4 @@
-﻿using ChatBot.Auth.Helpers;
-using ChatBot.Extensions;
+﻿using ChatBot.Extensions;
 using ChatBot.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -8,23 +7,26 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatBot.Auth.Jwt.Impl;
 
 [TransientService]
 public class JwtUtils : IJwtUtils
 {
-    private readonly AppSettings _appSettings; //contains secret
-    public JwtUtils(IOptions<AppSettings> appSettings)
+    IConfiguration _configuration;
+    
+    public JwtUtils(IConfiguration configuration)
     {
-        _appSettings = appSettings.Value;
+        _configuration = configuration;
     }
+    
 
     public string GenerateToken(User account)
     {
         //token generation logic, valid for 1 day, who doesnt like can change it to more/less
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", account.ID.ToString()) }), //seems familiar?
@@ -42,7 +44,7 @@ public class JwtUtils : IJwtUtils
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
 
         try
         {

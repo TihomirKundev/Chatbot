@@ -3,6 +3,7 @@ using ChatBot.Models.DTOs;
 using ChatBot.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using ChatBot.Exceptions;
 using ChatBot.Repositories.Interfaces;
 
 namespace ChatBot.Services;

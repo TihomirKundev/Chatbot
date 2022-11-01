@@ -1,7 +1,7 @@
-﻿using ChatBot.Auth.Helpers;
-using ChatBot.Models.Request;
+﻿using ChatBot.Models.Request;
 using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers;
@@ -12,16 +12,16 @@ namespace ChatBot.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    private readonly AppSettings _settings;
 
-    public AuthController(AppSettings settings, IAuthService authService)
+    public AuthController(IAuthService authService)
     {
-        _settings = settings;
         _authService = authService;
     }
 
     [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<AuthenticateRequest> Login([FromBody] AuthenticateRequest request)
     {
         var response = _authService.Authenticate(request);

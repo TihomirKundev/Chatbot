@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using System.Security.Authentication;
 using System.Threading.Tasks;
+using ChatBot.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ChatBot.Auth.Jwt;
 
@@ -26,6 +28,9 @@ public class JwtMiddleware
             .Split(" ")
             .Last();
 
+        if (token is null)
+            throw new TokenNotFoundException("No token found");
+ 
         //validate token    
         Guid? userId = jwtUtils.ValidateToken(token);
 
