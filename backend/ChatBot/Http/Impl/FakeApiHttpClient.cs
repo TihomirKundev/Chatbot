@@ -38,7 +38,7 @@ public class FakeApiHttpClient : IFakeApiHttpClient
             return new User(userDto.ID, //trust the process
                 userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new UserNotFoundException("No user found");
         }

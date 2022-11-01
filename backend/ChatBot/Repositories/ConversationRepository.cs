@@ -17,13 +17,11 @@ namespace ChatBot.Repositories;
 public class ConversationRepository : IConversationRepository
 {
     private readonly string _connString;
-    private readonly IMessageRepository _messageRepo;
     private readonly IUserService _userService;
 
-    public ConversationRepository(IConfiguration config, IMessageRepository messageRepo, IUserService userService)
+    public ConversationRepository(IConfiguration config, IUserService userService)
     {
         _connString = config.GetConnectionString("DefaultConnection");
-        _messageRepo = messageRepo;
         _userService = userService;
     }
 
@@ -82,13 +80,13 @@ public class ConversationRepository : IConversationRepository
 
         reader.Read();
         var status = (ConversationStatus)reader.GetInt32("status");
-        var messages = _messageRepo.GetAllMessagesByConversationID(id);
+        var messages = GetAllMessagesByConversationID(id);
         var participants = GetParticipantsByConversationID(id);
 
         return new Conversation(id, status, messages, participants);
     }
 
-    private ISet<IParticipant> GetParticipantsByConversationID(Guid id)
+    public ISet<IParticipant> GetParticipantsByConversationID(Guid id)
     {
         var participants = new HashSet<IParticipant>();
         
@@ -130,6 +128,8 @@ public class ConversationRepository : IConversationRepository
         }
     }
 
+    
+
     public void SetConversationStatus(Guid id, ConversationStatus status)
     {
         SqlHelper.ExecuteNonQuery(
@@ -137,5 +137,49 @@ public class ConversationRepository : IConversationRepository
         "UPDATE conversations SET status = @status WHERE id = @id",
         new SqlParameter("@id", id),
         new SqlParameter("@status", status));
+    }
+
+    public SortedSet<Message> GetAllMessagesByConversationID(Guid conversationID)
+    {
+        var messages = new SortedSet<Message>();
+
+        using var connection = new SqlConnection(_connString);
+        connection.Open();
+
+        // Get all participants
+        var participants = GetParticipantsByConversationID(conversationID);
+
+        // Get all messages
+        string getMessagesQuery = "SELECT id, author_id, content, timestamp FROM messages WHERE conversation_id = @id";
+        using var reader2 = SqlHelper.ExecuteReader(
+            connection,
+            getMessagesQuery,
+            new SqlParameter("@id", conversationID));
+        while (reader2.Read())
+        {
+            var id = reader2.GetInt32("id");
+            var authorID = reader2.GetGuid("author_id");
+            var content = reader2.GetString("content");
+            var timestamp = reader2.GetDateTime("timestamp");
+
+            IParticipant? author = participants.FirstOrDefault(p => p.ID == authorID);
+            if (author is null)
+                continue;
+
+            var message = new Message(id, author, content, timestamp);
+            messages.Add(message);
+        }
+        reader2.Close();
+
+        connection.Close();
+        return messages;
+    }
+
+    public bool DeleteMessageById(long id)
+    {
+        return SqlHelper.ExecuteNonQuery(_connString,
+            "DELETE FROM users WHERE id = @id",
+            new SqlParameter("@id", id))
+            > 0;
     }
 }

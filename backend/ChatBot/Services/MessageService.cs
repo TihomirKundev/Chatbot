@@ -11,16 +11,16 @@ namespace ChatBot.Services;
 
 public class MessageService : IMessageService
 {
-    private readonly IMessageRepository _messageRepo;
 
     private readonly IUserService _userService;
+    private readonly IConversationRepository _conversationRepo;
 
     public MessageService(
-        IMessageRepository messageRepository,
-        IUserService userService)
+        IUserService userService, 
+        IConversationRepository conversationRepo)
     {
-        _messageRepo = messageRepository;
         _userService = userService;
+        _conversationRepo = conversationRepo;
     }
 
 
@@ -50,7 +50,7 @@ public class MessageService : IMessageService
 
     public bool DeleteMessageById(long id)
     {
-        return _messageRepo.DeleteMessageById(id);
+        return _conversationRepo.DeleteMessageById(id);
     }
 
     private static DateTime UnixTimeStampToDateTime(long unixTimestamp)
