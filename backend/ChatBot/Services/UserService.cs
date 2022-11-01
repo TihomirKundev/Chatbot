@@ -4,6 +4,7 @@ using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChatBot.Http;
 
 namespace ChatBot.Services;
@@ -20,19 +21,17 @@ public class UserService : IUserService
     
     public User? GetById(Guid id)
     {
-        throw new NotImplementedException();
-
+        return _httpClient.GetByIdAsync(id).Result;
     }
     
     public User? GetByEmail(string email)
     {
-        throw new NotImplementedException();
-
+        return _httpClient.GetByEmailAsync(email).Result;
     }
 
     public ISet<User> GetAllUsers()
     {
-        throw new NotImplementedException();
+        return _httpClient.GetAllAsync().Result;
     }
 
     public ISet<IParticipant> GetParticipantsByConversationID(Guid conversationID)
