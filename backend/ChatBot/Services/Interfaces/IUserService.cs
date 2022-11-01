@@ -11,7 +11,5 @@ namespace ChatBot.Services.Interfaces
         User? GetByEmail(string email);
 
         ISet<User> GetAllUsers();
-
-        ISet<IParticipant> GetParticipantsByConversationID(Guid conversationID);
     }
 }

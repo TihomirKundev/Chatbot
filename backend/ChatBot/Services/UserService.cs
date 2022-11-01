@@ -33,9 +33,4 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
-
-    public ISet<IParticipant> GetParticipantsByConversationID(Guid conversationID)
-    {
-        throw new NotImplementedException();
-    }
 }

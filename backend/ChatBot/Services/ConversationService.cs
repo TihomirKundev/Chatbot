@@ -48,6 +48,4 @@ public class ConversationService : IConversationService
     {
         _conversationRepo.SetConversationStatus(conversationID, status);
     }
-
-
 }
