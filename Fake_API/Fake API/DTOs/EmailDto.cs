@@ -1,3 +1,3 @@
-﻿namespace Fake_API.Entities.DTO;
+﻿namespace Fake_API.DTOs;
 
 public record EmailDto(string email);

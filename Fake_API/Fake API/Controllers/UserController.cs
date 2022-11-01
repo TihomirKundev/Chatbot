@@ -1,7 +1,6 @@
 ﻿using Fake_API.DTOs;
-using Fake_API.Entities.DTO;
+using Fake_API.Entities;
 using Fake_API.Service;
-using FakeAPI.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;

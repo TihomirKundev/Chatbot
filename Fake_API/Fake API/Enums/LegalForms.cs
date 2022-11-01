@@ -1,4 +1,4 @@
-﻿namespace FakeAPI.Enums
+﻿namespace Fake_API.Enums
 {
     public enum LegalForms
     {

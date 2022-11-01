@@ -1,7 +1,7 @@
 ﻿using Fake_API.Exception;
 using System.Net;
 
-namespace ChatBot.Auth;
+namespace Fake_API.Config;
 
 public class ErrorHandlerMiddleware
 {

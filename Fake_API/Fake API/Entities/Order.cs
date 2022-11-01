@@ -1,4 +1,4 @@
-﻿namespace FakeAPI.Entities
+﻿namespace Fake_API.Entities
 {
     public class Order
     {

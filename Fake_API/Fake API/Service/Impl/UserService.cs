@@ -1,11 +1,9 @@
-﻿using System.Dynamic;
-using Fake_API.DAL.Repository;
+﻿using Fake_API.DAL.Repository;
 using Fake_API.DTOs;
-using Fake_API.Entities.DTO;
+using Fake_API.Entities;
 using Fake_API.Exception;
-using FakeAPI.Entities;
 
-namespace Fake_API.Service
+namespace Fake_API.Service.Impl
 {
     public class UserService : IUserService
     {
@@ -13,7 +11,7 @@ namespace Fake_API.Service
 
         public UserService(IUserRepository repository)
         {
-            this._userRepository = repository;
+            _userRepository = repository;
         }
 
         public User GetUser(LoginCredentialsDTO loginCredentialsDto)

@@ -1,7 +1,8 @@
-using ChatBot.Auth;
+using Fake_API.Config;
 using Fake_API.DAL.Repository;
+using Fake_API.DAL.Repository.Impl;
 using Fake_API.Service;
-using FakeAPI.DAL;
+using Fake_API.Service.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 

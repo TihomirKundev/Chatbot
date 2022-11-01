@@ -1,6 +1,6 @@
-﻿using FakeAPI.Enums;
+﻿using Fake_API.Enums;
 
-namespace FakeAPI.Entities
+namespace Fake_API.Entities
 {
     public class Company
     {

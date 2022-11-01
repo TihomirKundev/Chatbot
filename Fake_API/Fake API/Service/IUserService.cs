@@ -1,6 +1,5 @@
 ﻿using Fake_API.DTOs;
-using Fake_API.Entities.DTO;
-using FakeAPI.Entities;
+using Fake_API.Entities;
 
 namespace Fake_API.Service;
 

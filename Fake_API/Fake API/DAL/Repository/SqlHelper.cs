@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace ChatBot.Repositories.Utils;
+namespace Fake_API.DAL.Repository;
 
 // NOTICE: This class does NOT support other command types except for CommandType.Text
 internal static class SqlHelper
