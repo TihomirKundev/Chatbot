@@ -4,6 +4,7 @@ namespace FakeAPI.Entities
 {
     public class User
     {
+        public Guid Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
@@ -13,8 +14,9 @@ namespace FakeAPI.Entities
         public Company Company { get; private set; }
         public List<Order> Orders { get; private set; }
 
-        public User(string firstName, string lastName, string email, string password, string phone, Role role, Company company, List<Order> orders)
+        public User(Guid id, string firstName, string lastName, string email, string password, string phone, Role role, Company company, List<Order> orders)
         {
+            Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
