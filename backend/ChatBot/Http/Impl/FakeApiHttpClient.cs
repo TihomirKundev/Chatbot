@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ChatBot.Models.DTOs;
 using Fake_API.Entities.DTO;
 
 namespace ChatBot.Http;
@@ -123,6 +124,34 @@ public class FakeApiHttpClient : IFakeApiHttpClient
 
             return new User(userDto.ID, //trust the process
                 userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);
+        }
+        catch (Exception e)
+        {
+            throw new UserNotFoundException("No user found");
+        }
+    }
+
+    public async Task<FakeApiUserDTO> GetFakeApiUserDTOByIdAsync(Guid id)
+    {
+        try
+        {
+            GuidDto guidDto = new GuidDto(id);
+
+            var json = JsonSerializer.Serialize(guidDto);
+
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("http://localhost:5019/user/id"),
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
+            var response = await _httpClient.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var userDto = JsonSerializer.Deserialize<FakeApiUserDTO>(responseContent,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return new FakeApiUserDTO(userDto.Id, userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role
+            , userDto.Company,userDto.Orders);
         }
         catch (Exception e)
         {

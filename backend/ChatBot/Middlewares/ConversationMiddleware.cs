@@ -147,6 +147,14 @@ namespace ChatBot.Middlewares
                         _conversationService.AddMessageToConversation(aiMs, wsclient.ConversationID.Value);
                         _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
                     }
+                    if (dto.QuickSelector == QuickSelector.order)
+                    {
+                        string orderAnswer = _aiClientService.getOrderAnswer(dto.AuthorID, dto.Content).Result; //TODO: maybe async
+                        var aiMs = new MessageDTO() { AuthorID = Bot.GetChatBotID(), Content = orderAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot" };
+                        clients.ForEach(c => c.SendMessageAsync(aiMs));
+                        _conversationService.AddMessageToConversation(aiMs, wsclient.ConversationID.Value);
+                        _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
+                    }
 
                     break;
 
