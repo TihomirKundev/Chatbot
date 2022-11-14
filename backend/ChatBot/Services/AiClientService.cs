@@ -10,20 +10,21 @@ using ChatBot.Http.Model;
 using ChatBot.Models;
 
 namespace ChatBot.Services;
+
 [TransientService]
 public class AiClientService : IAiClientService
 {
     private string _aiBaseURL = "http://127.0.0.1:8000";
     private HttpClient _httpClient = new HttpClient();
-    private FakeApiHttpClient _fakeApiHttpClient;
+    private UserHttpClient _fakeApiHttpClient;
 
     public AiClientService() { }
 
-    public AiClientService(string aiBaseURL, HttpClient httpClient, FakeApiHttpClient fakeApiHttpClient)
+    public AiClientService(string aiBaseURL, HttpClient httpClient, UserHttpClient fakeApiHttpClient)
     {
         _aiBaseURL = aiBaseURL;
         _httpClient = httpClient;
-        _fakeApiHttpClient = new FakeApiHttpClient(_httpClient);
+        _fakeApiHttpClient = new UserHttpClient(_httpClient);
 
     }
 
