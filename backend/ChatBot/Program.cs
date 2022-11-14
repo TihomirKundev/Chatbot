@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
         policy => { policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
 });
 builder.Services.AddControllers();
-builder.Services.AddHttpClient<IFakeApiHttpClient, FakeApiHttpClient>();
+builder.Services.AddHttpClient<IUserHttpClient, UserHttpClient>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -30,11 +30,12 @@ if (!app.Environment.IsDevelopment())
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(60), });
 
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseCors("Development");
+app.UseMiddleware<JwtMiddleware>();
 
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.UseEndpoints(endpoint => { endpoint.MapControllers(); });
 
@@ -42,7 +43,6 @@ app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSecond
 
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseMiddleware<JwtMiddleware>();
 app.UseMiddleware<ConversationMiddleware>();
 
 app.Run();

@@ -8,7 +8,7 @@ import {generateTicket} from "./api";
 import {TicketDTO, ticketDTO} from "../DTO/ticketDTO";
 import ChatBox from './ChatBox';
 
-
+                                                               
 const ChatBot = () => {
     const ws = useRef(null);
 

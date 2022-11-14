@@ -1,6 +1,7 @@
 ﻿using ChatBot.Models.DTOs;
 using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers

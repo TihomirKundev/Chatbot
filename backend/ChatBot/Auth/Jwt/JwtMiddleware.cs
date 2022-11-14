@@ -17,28 +17,29 @@ public class JwtMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
+    public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils) //attaches userId to context
     {
         //get token, split bearer
-        var token = context.Request.Headers["Authentication"]
+        var token = context.Request.Headers["Authorization"]
             .FirstOrDefault()?
             .Split(" ")
             .Last();
 
-        if (token is null)
-            throw new TokenNotFoundException("No token found");
+       
+          //  await _next(context);
+          //  throw new TokenNotFoundException("No token found");
 
         //validate token    
-        Guid? userId = jwtUtils.ValidateToken(token);
 
         //attach user to context on successful jwt validation
         //might break due to guid
+        Guid? userId = jwtUtils.ValidateToken(token);
         if (userId is not null)
         {
             var user = userService.GetById(userId.Value);
 
             if (user is not null)
-                context.Items["UserID"] = user.ID;
+                context.Items["UserID"] = user.ID; //dude on the internet is puting th whole user object here
             else
                 throw new AuthenticationException();
         }

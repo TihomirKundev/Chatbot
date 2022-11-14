@@ -24,7 +24,7 @@ namespace Fake_API.Service.Impl
 
         public User GetById(Guid id)
         {
-            User? user = _userRepository.GetById(id);
+            var user = _userRepository.GetById(id);
             if (user is null)
                 throw new UserNotFoundException("No user found");
             return user;
@@ -32,7 +32,7 @@ namespace Fake_API.Service.Impl
 
         public User GetByEmail(string email)
         {
-            User? user = _userRepository.GetByEmail(email);
+            var user = _userRepository.GetByEmail(email);
             if (user is null)
                 throw new UserNotFoundException("No user found");
             return user;

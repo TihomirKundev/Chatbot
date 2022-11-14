@@ -1,7 +1,9 @@
 using System;
+using ChatBot.Auth.Attributes;
 using ChatBot.Models;
 using ChatBot.Services.Interfaces;
 using Fake_API.Entities.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +11,8 @@ namespace ChatBot.Controllers;
 
 /// <summary>
 /// Added for testing purposes
-/// 
+///
+
 [ApiController]
 [Route("user")] 
 public class UserController : ControllerBase
@@ -22,24 +25,22 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("id")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public ActionResult<User> GetById([FromBody] GuidDto id)
     {
         return Ok(_userService.GetById(id.id));
     }
     
     [HttpGet("email")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public ActionResult<User> GetByEmail([FromBody] EmailDto email)
     {
         return Ok(_userService.GetByEmail(email.email));
     }
     
+    
     [HttpGet("all")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Auth.Attributes.Authorize]
     public ActionResult<User> GetAll()
     {
         return Ok(_userService.GetAllUsers());

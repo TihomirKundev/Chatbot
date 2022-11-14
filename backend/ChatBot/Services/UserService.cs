@@ -11,9 +11,9 @@ namespace ChatBot.Services;
 [TransientService]
 public class UserService : IUserService
 {
-    private IFakeApiHttpClient _httpClient;
+    private IUserHttpClient _httpClient;
 
-    public UserService(IFakeApiHttpClient httpClient)
+    public UserService(IUserHttpClient httpClient)
     {
         _httpClient = httpClient;
     }

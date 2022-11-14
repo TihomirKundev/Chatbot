@@ -7,6 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using ChatBot.Models.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace ChatBot.Auth.Jwt.Impl;
 
@@ -20,7 +22,6 @@ public class JwtUtils : IJwtUtils
         _configuration = configuration;
     }
 
-
     public string GenerateToken(User account)
     {
         //token generation logic, valid for 1 day, who doesnt like can change it to more/less
@@ -28,12 +29,19 @@ public class JwtUtils : IJwtUtils
         var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", account.ID.ToString()) }), //seems familiar?
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim("UserID", account.ID.ToString()),
+                new Claim("Role", account.Role.ToString()) //role to the token?
+            }), 
+            
             Expires = DateTime.Now.AddDays(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor); //create the token
+        
+        
         return tokenHandler.WriteToken(token);
     }
 
@@ -58,7 +66,7 @@ public class JwtUtils : IJwtUtils
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             //returned userId from the token
-            return Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            return Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
         }
         catch
         {
@@ -66,4 +74,4 @@ public class JwtUtils : IJwtUtils
             return null;
         }
     }
-}
+    }

@@ -12,11 +12,11 @@ using Fake_API.Entities.DTO;
 
 namespace ChatBot.Http;
 
-public class FakeApiHttpClient : IFakeApiHttpClient
+public class UserHttpClient : IUserHttpClient
 {
     private readonly HttpClient _httpClient;
 
-    public FakeApiHttpClient(HttpClient httpClient)
+    public UserHttpClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
@@ -30,7 +30,7 @@ public class FakeApiHttpClient : IFakeApiHttpClient
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("http://localhost:5019/user"),
+                RequestUri = new Uri("http://localhost:5019/user/login"),
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
             var response = await _httpClient.SendAsync(request);
@@ -63,7 +63,7 @@ public class FakeApiHttpClient : IFakeApiHttpClient
             
             List<User> users = new List<User>();
             
-            usersDto.ForEach(item => users.Add(new User(item.ID, 
+            usersDto.ForEach(item => users.Add(new User(item.ID, //trust the process
                 item.FirstName, item.LastName, item.Email, item.Phone, item.Password, item.Role)));
             
             return new HashSet<User>(users);

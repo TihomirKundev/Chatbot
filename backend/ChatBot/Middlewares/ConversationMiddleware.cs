@@ -48,7 +48,8 @@ namespace ChatBot.Middlewares
 
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-            var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
+          //  var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
+          var wsClient = new WebSocketClient(new Guid(), webSocket);
 
             await HandleClient(wsClient);
         }

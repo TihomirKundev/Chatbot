@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers;
 
-[Authorize]
+
 [ApiController]
 [Route("auth")]
 public class AuthController : ControllerBase
@@ -17,14 +17,13 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-
+    
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<AuthenticateRequest> Login([FromBody] AuthenticateRequest request)
+    public ActionResult<AuthenticateRequest> Login([FromBody] AuthenticateRequest request) 
     {
-        var response = _authService.Authenticate(request);
-        return Ok(response);
+        return Ok(_authService.Authenticate(request));
     }
 }
