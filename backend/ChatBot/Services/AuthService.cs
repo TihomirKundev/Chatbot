@@ -13,9 +13,9 @@ public class AuthService : IAuthService
 {
     private readonly IJwtUtils _utils;
     private readonly IUserService _userService;
-    private readonly IFakeApiHttpClient _httpClient;
+    private readonly IUserHttpClient _httpClient;
 
-    public AuthService(IJwtUtils utils, IUserService userService, IFakeApiHttpClient httpClient)
+    public AuthService(IJwtUtils utils, IUserService userService, IUserHttpClient httpClient)
     {
         _utils = utils;
         _userService = userService;

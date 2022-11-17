@@ -9,14 +9,16 @@ namespace Fake_API.DAL.Repository.Impl
     public class UserRepository : IUserRepository
     {
         private readonly string connString =
-            "Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            "Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;";
 
         public User CheckAndGetUSer(string email, string password)
         {
             User user = new User();
-            SqlConnection conn = new SqlConnection("Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection("Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;");
             conn.Open();
-            SqlCommand command = new SqlCommand("SELECT * FROM [user] WHERE email = '" + email + "' AND [password] = '" + password + "'", conn);
+            SqlCommand command = new SqlCommand("SELECT * FROM [user] WHERE email = @email AND password = @password", conn);
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@password", password);
             string res = (string)command.ExecuteScalar();
             if (string.IsNullOrEmpty(res))
             {
@@ -24,7 +26,7 @@ namespace Fake_API.DAL.Repository.Impl
             }
             else
             {
-                return GetUser(email);
+                return GetByEmail(email)!;
             }
         }
 
@@ -43,7 +45,7 @@ namespace Fake_API.DAL.Repository.Impl
             while (rdr.Read())
             {
                 Company company = GetCompany(rdr.GetInt32("company_id"));
-                List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+                List<Order> orders = GetOrdersForUser(rdr.GetString("id"));
 
                 return new User(
                     Guid.Parse(rdr.GetString("id")),
@@ -76,7 +78,7 @@ namespace Fake_API.DAL.Repository.Impl
                 return null;
 
             Company company = GetCompany(rdr.GetInt32("company_id"));
-            List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+            List<Order> orders = GetOrdersForUser(rdr.GetString("id"));
 
             return new User(
                 Guid.Parse(rdr.GetString("id")),
@@ -105,7 +107,7 @@ namespace Fake_API.DAL.Repository.Impl
             while (rdr.Read())
             {
                 Company company = GetCompany(rdr.GetInt32("company_id"));
-                List<Order> orders = GetOrdersForUser(rdr.GetString("email"));
+                List<Order> orders = GetOrdersForUser(rdr.GetString("id"));
 
                 User user = new User(
                     Guid.Parse(rdr.GetString("id")),
@@ -123,34 +125,34 @@ namespace Fake_API.DAL.Repository.Impl
             return userList;
         }
 
-        private User GetUser(string email)
-        {
-            User user = new User();
-            SqlConnection conn = new SqlConnection("Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            conn.Open();
-            SqlCommand command = new SqlCommand("SELECT * FROM [user] WHERE email = '" + email + "'", conn);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-            foreach (DataRow dr in dataTable.Rows)
-            {
-                Guid id = Guid.Parse(dr["id"].ToString());
-                string firstName = Convert.ToString(dr["first_name"]);
-                string lastName = Convert.ToString(dr["last_name"]);
-                string password = Convert.ToString(dr["password"]);
-                string phone = Convert.ToString(dr["phone"]);
-                Role role = Role.Customer;
-                Company company = GetCompany(Convert.ToInt32(dr["company_id"]));
-                List<Order> orders = GetOrdersForUser(email);
-                user = new User(id, firstName, lastName, email, password, phone, role, company, orders);
-            }
-            conn.Close();
-            return user;
-        }
+        // private User GetUser(string email) //todo: remove
+        // {
+        //     User user = new User();
+        //     SqlConnection conn = new SqlConnection("Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;");
+        //     conn.Open();
+        //     SqlCommand command = new SqlCommand("SELECT * FROM [user] WHERE email = '" + email + "'", conn);
+        //     SqlDataAdapter adapter = new SqlDataAdapter(command);
+        //     DataTable dataTable = new DataTable();
+        //     adapter.Fill(dataTable);
+        //     foreach (DataRow dr in dataTable.Rows)
+        //     {
+        //         Guid id = Guid.Parse(dr["id"].ToString());
+        //         string firstName = Convert.ToString(dr["first_name"]);
+        //         string lastName = Convert.ToString(dr["last_name"]);
+        //         string password = Convert.ToString(dr["password"]);
+        //         string phone = Convert.ToString(dr["phone"]);
+        //         Role role = Role.Customer;
+        //         Company company = GetCompany(Convert.ToInt32(dr["company_id"]));
+        //         List<Order> orders = GetOrdersForUser(email);
+        //         user = new User(id, firstName, lastName, email, password, phone, role, company, orders);
+        //     }
+        //     conn.Close();
+        //     return user;
+        // }
         private Company GetCompany(int companyId)
         {
             Company company = new Company();
-            SqlConnection conn = new SqlConnection("Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection("Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;");
             conn.Open();
             SqlCommand command = new SqlCommand("SELECT * FROM company WHERE id = " + companyId + "", conn);
             SqlDataAdapter adapter = new SqlDataAdapter(command);
@@ -173,7 +175,7 @@ namespace Fake_API.DAL.Repository.Impl
         private List<Vehicle> GetVehiclesForOrder(int orderNum)
         {
             List<Vehicle> vehicles = new List<Vehicle>();
-            SqlConnection conn = new SqlConnection("Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection("Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;");
             conn.Open();
             SqlCommand command = new SqlCommand("SELECT * FROM vehicle INNER JOIN order_item ON order_item.reference_num = vehicle.reference_num INNER JOIN[order] ON[order].order_num = order_item.order_num WHERE[order].order_num = " + orderNum + "", conn);
             SqlDataAdapter adapter = new SqlDataAdapter(command);
@@ -192,12 +194,13 @@ namespace Fake_API.DAL.Repository.Impl
             }
             return vehicles;
         }
-        private List<Order> GetOrdersForUser(string email)
+        private List<Order> GetOrdersForUser(string userGuid)
         {
             List<Order> orders = new List<Order>();
-            SqlConnection conn = new SqlConnection("Server=tcp:group1.database.windows.net,1433;Initial Catalog=Group;Persist Security Info=False;User ID=BasWorldShit;Password=BasWorld1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            SqlConnection conn = new SqlConnection("Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;");
             conn.Open();
-            SqlCommand command = new SqlCommand("SELECT * FROM [order] INNER JOIN client_order ON client_order.order_id = [order].order_num WHERE email = '" + email + "'", conn);
+            SqlCommand command = new SqlCommand("SELECT * FROM [order] INNER JOIN client_order ON client_order.order_id = [order].order_num WHERE user_id = @userId", conn);
+            command.Parameters.AddWithValue("@userId", userGuid);
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             DataTable dataTable = new DataTable();
             adapter.Fill(dataTable);

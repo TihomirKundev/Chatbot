@@ -18,6 +18,7 @@ import basLogo from '../../images/logo.png';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import userApi from './userApi';
 import {FormHelperText} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 
 const theme = createTheme();
@@ -25,6 +26,7 @@ const theme = createTheme();
 export default function LoginPage() {
 
     const [errorMessage, setErrorMessage] = React.useState("");
+    let navigate = useNavigate();
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -33,23 +35,17 @@ export default function LoginPage() {
             email: data.get('email'),
             password: data.get('password'),
         }
-        //for demo purposes
-        if(request.email === "admin" && request.password === "admin") {
-            window.location.href = "/admin";
-        }else if(request.email === "customer" && request.password === "customer") {
-            window.location.href = "/customer";
-        }
 
-        //actual implementation, uncomment after demo
-        /*userApi.login(request).then(() => {
+        userApi.login(request).then(() => {
             const user = userApi.getCurrentUser();
+            console.log(user);
             if(user.role === "ADMIN") {
-                window.location.href = "/admin";
+                navigate("/admin");
             }else if (user.role === "CUSTOMER") {
-                window.location.href = "/customer";
+                navigate("/customer");
             }}).catch((error) => {
             setErrorMessage(error.response.data.message);
-        });*/
+        });
     };
 
     return (

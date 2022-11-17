@@ -48,7 +48,8 @@ namespace ChatBot.Middlewares
 
             var webSocket = await context.WebSockets.AcceptWebSocketAsync();
 
-            var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
+          //  var wsClient = new WebSocketClient(Guid.Parse(context.Items["UserID"]!.ToString()!), webSocket);
+          var wsClient = new WebSocketClient(new Guid(), webSocket);
 
             await HandleClient(wsClient);
         }
@@ -143,6 +144,14 @@ namespace ChatBot.Middlewares
                     {
                         string faqAnswer = _aiClientService.getFaqAnswer(dto.Content).Result; //TODO: maybe async
                         var aiMs = new MessageDTO() { AuthorID = Bot.GetChatBotID(), Content = faqAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot" };
+                        clients.ForEach(c => c.SendMessageAsync(aiMs));
+                        _conversationService.AddMessageToConversation(aiMs, wsclient.ConversationID.Value);
+                        _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
+                    }
+                    if (dto.QuickSelector == QuickSelector.order)
+                    {
+                        string orderAnswer = _aiClientService.getOrderAnswer(dto.AuthorID, dto.Content).Result; //TODO: maybe async
+                        var aiMs = new MessageDTO() { AuthorID = Bot.GetChatBotID(), Content = orderAnswer, Action = MessageAction.SEND, QuickSelector = QuickSelector.ts, Nickname = "bot" };
                         clients.ForEach(c => c.SendMessageAsync(aiMs));
                         _conversationService.AddMessageToConversation(aiMs, wsclient.ConversationID.Value);
                         _logger.LogInformation($"Client ID: '{aiMs.AuthorID}' sent a message: '{aiMs.Content}'.");
