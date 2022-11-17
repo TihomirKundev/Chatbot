@@ -32,7 +32,7 @@ public class MessageService : IMessageService
         if (string.IsNullOrWhiteSpace(dto.Content))
             throw new InvalidMessageException("Message content cannot be empty.");
 
-        IParticipant? author = _userService.GetById(dto.AuthorID);
+        Participant? author = _userService.GetById(dto.AuthorID);
 
         if (author is null)
             throw new InvalidMessageException($"No participant exists with such ID: '{dto.AuthorID}'");

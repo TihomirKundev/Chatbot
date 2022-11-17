@@ -2,8 +2,18 @@
 
 namespace ChatBot.Models
 {
-    public interface IParticipant
+    public class Participant
     {
-        Guid ID { get; }
+        public Guid ID { get; }
+
+        public Participant()
+        {
+
+        }
+
+        public Participant(Guid id)
+        {
+            ID = id;
+        }
     }
 }

@@ -7,13 +7,14 @@ namespace ChatBot.Models;
 
 public class Conversation
 {
+    public Conversation() { }
     public Conversation(Guid id)
     {
         ID = id;
         Status = ConversationStatus.ONGOING;
     }
 
-    public Conversation(Guid id, ConversationStatus status, SortedSet<Message> messages, ISet<IParticipant> participants)
+    public Conversation(Guid id, ConversationStatus status, SortedSet<Message> messages, ISet<Participant> participants)
     {
         ID = id;
         Status = status;
@@ -46,9 +47,9 @@ public class Conversation
         }
     }
 
-    public ISet<IParticipant> Participants
+    public ISet<Participant> Participants
     {
-        get => new HashSet<IParticipant>(_participants);
+        get => new HashSet<Participant>(_participants);
         set => _participants = value;
     }
     public bool AddMessage(Message message) => _messages.Add(message);
@@ -65,5 +66,6 @@ public class Conversation
     }
 
     private SortedSet<Message> _messages = new();
-    private ISet<IParticipant> _participants = new HashSet<IParticipant>();
+    private ISet<Participant> _participants = new HashSet<Participant>();
 }
+    

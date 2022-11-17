@@ -26,7 +26,7 @@ public class TicketService : ITicketService
             status = Status.OPENED
         };
 
-        _ticketRepository.SaveTicket(ticket);
+        //_ticketRepository.SaveTicket(ticket);
         return ticket;
     }
 

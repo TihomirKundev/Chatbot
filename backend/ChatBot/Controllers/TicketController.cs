@@ -1,4 +1,5 @@
-﻿using ChatBot.Models.DTOs;
+﻿using ChatBot.Auth.Attributes;
+using ChatBot.Models.DTOs;
 using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatBot.Controllers
 {
+    /// <summary>
+    /// When a func is annotated with [Token] attribute, it requires a token to be passed in the header 
+    ///
     [ApiController]
     [Route("ticket")]
     public class TicketController : ControllerBase

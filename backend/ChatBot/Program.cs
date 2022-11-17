@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using ChatBot.Repositories.EFC;
+using Fake_API.DAL.Repository.EFC.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +20,16 @@ builder.Services.AddCors(options =>
         policy => { policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod(); });
 });
 builder.Services.AddControllers();
+
 builder.Services.AddHttpClient<IUserHttpClient, UserHttpClient>();
 
-var app = builder.Build();
-// Configure the HTTP request pipeline.
+//builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 
+builder.Services.AddDbContext<DatabaseContext>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

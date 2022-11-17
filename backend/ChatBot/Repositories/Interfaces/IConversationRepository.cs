@@ -12,7 +12,7 @@ namespace ChatBot.Repositories.Interfaces
         Conversation? GetConversationByID(Guid id);
         void SetConversationStatus(Guid id, ConversationStatus status);
         void AddParticipantToConversation(Guid participantID, Guid conversationID);
-        ISet<IParticipant> GetParticipantsByConversationID(Guid id);
+        ISet<Participant> GetParticipantsByConversationID(Guid id);
         SortedSet<Message> GetAllMessagesByConversationID(Guid conversationID);
         bool DeleteMessageById(long id);
     }

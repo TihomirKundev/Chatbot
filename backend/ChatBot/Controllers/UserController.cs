@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChatBot.Controllers;
 
 /// <summary>
-/// Added for testing purposes
+/// When a func is annotated with [Token] attribute, it requires a token to be passed in the header 
 ///
 
 [ApiController]
@@ -25,14 +25,14 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("id")]
-    [AllowAnonymous]
+    [Token]
     public ActionResult<User> GetById([FromBody] GuidDto id)
     {
         return Ok(_userService.GetById(id.id));
     }
     
     [HttpGet("email")]
-    [AllowAnonymous]
+    [Token]
     public ActionResult<User> GetByEmail([FromBody] EmailDto email)
     {
         return Ok(_userService.GetByEmail(email.email));
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
     
     
     [HttpGet("all")]
-    [Auth.Attributes.Authorize]
+    [Token]
     public ActionResult<User> GetAll()
     {
         return Ok(_userService.GetAllUsers());

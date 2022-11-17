@@ -25,25 +25,18 @@ public class JwtMiddleware
             .Split(" ")
             .Last();
 
-       
           //  await _next(context);
           //  throw new TokenNotFoundException("No token found");
-
-        //validate token    
-
-        //attach user to context on successful jwt validation
-        //might break due to guid
+        
         Guid? userId = jwtUtils.ValidateToken(token);
+        
         if (userId is not null)
         {
             var user = userService.GetById(userId.Value);
-
-            if (user is not null)
-                context.Items["UserID"] = user.ID; //dude on the internet is puting th whole user object here
-            else
+            if(user is null)
                 throw new AuthenticationException();
+            context.Items["UserID"] = user.ID; //attaches userId to context
         }
-
         await _next(context);
     }
 }

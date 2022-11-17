@@ -86,9 +86,9 @@ public class ConversationRepository : IConversationRepository
         return new Conversation(id, status, messages, participants);
     }
 
-    public ISet<IParticipant> GetParticipantsByConversationID(Guid id)
+    public ISet<Participant> GetParticipantsByConversationID(Guid id)
     {
-        var participants = new HashSet<IParticipant>();
+        var participants = new HashSet<Participant>();
         
         using var reader = SqlHelper.ExecuteReader(
             _connString,
@@ -99,7 +99,7 @@ public class ConversationRepository : IConversationRepository
             return participants;
 
         // TODO: refactor to get only required users
-        var users = _userService.GetAllUsers().ToDictionary(u => u.ID, u => (IParticipant)u);
+        var users = _userService.GetAllUsers().ToDictionary(u => u.ID, u => (Participant)u);
         users.Add(Bot.GetChatBotID(), new Bot());
 
         while(reader.Read())
@@ -162,7 +162,7 @@ public class ConversationRepository : IConversationRepository
             var content = reader2.GetString("content");
             var timestamp = reader2.GetDateTime("timestamp");
 
-            IParticipant? author = participants.FirstOrDefault(p => p.ID == authorID);
+            Participant? author = participants.FirstOrDefault(p => p.ID == authorID);
             if (author is null)
                 continue;
 
