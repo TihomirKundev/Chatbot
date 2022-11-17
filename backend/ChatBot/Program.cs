@@ -14,10 +14,11 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddDbContext<DatabaseContext>(options =>
-// {
-//     options.UseMySql(ServerVersion.AutoDetect( builder.Configuration.GetConnectionString("DefaultConnection")));
-// });
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseMySql(ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")));
+});
+
 builder.Services.RegisterServices();
 builder.Services.AddCors(options =>
 {

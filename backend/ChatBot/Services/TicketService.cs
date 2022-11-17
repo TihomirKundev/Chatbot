@@ -9,7 +9,7 @@ using ChatBot.Repositories.EFC;
 
 namespace ChatBot.Services;
 
-[SingletonService]
+[ScopedService]
 public class TicketService : ITicketService
 {
     private readonly ITicketRepository _ticketRepository;
