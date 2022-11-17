@@ -7,20 +7,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace ChatBot.Repositories.EFC;
 
-public interface IDatabaseContext
-{
-}
 
-[ScopedService]
-public class DatabaseContext : DbContext, IDatabaseContext
+
+public class DatabaseContext : DbContext
 {
     private readonly IConfiguration _configuration;
     
-    public DatabaseContext(DbContextOptions options, IConfiguration configuration)
-        : base(options)
-    {
-        _configuration = configuration;
-    }
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options){}
+       
         
     public DbSet<User> Users { get; set; }
     public DbSet<Conversation> Chats { get; set; }
@@ -54,9 +48,9 @@ public class DatabaseContext : DbContext, IDatabaseContext
     //     });
     // }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySql(ServerVersion.AutoDetect(_configuration.GetConnectionString("DefaultConnection"))); 
-   
-    }
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseMySql(ServerVersion.AutoDetect("server=127.0.0.1;uid=admin;pwd=12345;database=basworld")); 
+    //
+    // }
 }

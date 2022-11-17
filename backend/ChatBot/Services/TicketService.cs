@@ -13,17 +13,16 @@ namespace ChatBot.Services;
 public class TicketService : ITicketService
 {
     private readonly ITicketRepository _ticketRepository;
-    
-    private DatabaseContext _context;
 
+    private readonly DatabaseContext _context;
     
     
-    public TicketService(ITicketRepository ticketRepository, DatabaseContext databaseContext)
+    public TicketService(ITicketRepository ticketRepository, DatabaseContext context)
     {
         _ticketRepository = ticketRepository;
-        _context = databaseContext;
+        _context = context;
     }
-
+  
     public TicketDTO CreateTicket(TicketCreateDTO incomingTicket)
     {
         var ticket = new TicketDTO()
@@ -35,8 +34,11 @@ public class TicketService : ITicketService
         };
         _context.Participants.Add(ticket);
       //  _ticketRepository.SaveTicket(ticket);
+      _context.SaveChanges();
         return ticket;
     }
+
+
 
     public TicketDTO[] GetAllTickets() => _context.Participants.ToArray();
 

@@ -34,7 +34,7 @@ public class Conversation
         set => _messages = value;
     }
 
-    public ConversationStatus Status { get; private set; }
+    public ConversationStatus Status { get;  set; }  //entity framework needs a setter, idk we can convert to records and crete model motators later
 
     public DateTime StartTime => _messages.First().Timestamp;
 

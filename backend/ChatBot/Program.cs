@@ -7,18 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using ChatBot.Repositories.EFC;
-using Fake_API.DAL.Repository.EFC.Options;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
+using Pomelo.EntityFrameworkCore;
+
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
-{
-    options.UseMySql(ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")));
-});
 
+
+
+var serverVersion = new MariaDbServerVersion(new Version(10, 4, 24));
+builder.Services.AddDbContext<DatabaseContext>(options=>options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),serverVersion));  
 builder.Services.RegisterServices();
 builder.Services.AddCors(options =>
 {

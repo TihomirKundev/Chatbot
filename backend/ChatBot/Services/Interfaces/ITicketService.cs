@@ -1,10 +1,12 @@
 ﻿using ChatBot.Models.DTOs;
+using ChatBot.Repositories.EFC;
 
 namespace ChatBot.Services.Interfaces
 {
     public interface ITicketService
     {
-        TicketDTO CreateTicket(TicketCreateDTO incomingTicket);
+      
         TicketDTO[] GetAllTickets();
+        TicketDTO CreateTicket(TicketCreateDTO incomingTicket);
     }
 }

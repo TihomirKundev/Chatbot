@@ -1,5 +1,6 @@
 ﻿using ChatBot.Auth.Attributes;
 using ChatBot.Models.DTOs;
+using ChatBot.Repositories.EFC;
 using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -15,10 +16,11 @@ namespace ChatBot.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
-
-        public TicketController(ITicketService ticketService)
+      
+        public TicketController(ITicketService ticketService, DatabaseContext context)
         {
             _ticketService = ticketService;
+            
         }
 
         [HttpPost("")]
