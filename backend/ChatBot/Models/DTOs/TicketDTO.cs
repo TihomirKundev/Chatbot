@@ -1,7 +1,10 @@
-﻿namespace ChatBot.Models.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ChatBot.Models.DTOs;
 
 public class TicketDTO
 {
+    [Key]
     public string ticketnumber { get; set; } = string.Empty;
     public string email { get; set; } = string.Empty;
     public string name { get; set; } = string.Empty;

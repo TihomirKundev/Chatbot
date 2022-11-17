@@ -3,6 +3,9 @@ using ChatBot.Models.DTOs;
 using ChatBot.Repositories.Interfaces;
 using ChatBot.Services.Interfaces;
 using System;
+using System.Linq;
+using ChatBot.Repositories.EFC;
+
 
 namespace ChatBot.Services;
 
@@ -10,10 +13,15 @@ namespace ChatBot.Services;
 public class TicketService : ITicketService
 {
     private readonly ITicketRepository _ticketRepository;
+    
+    private DatabaseContext _context;
 
-    public TicketService(ITicketRepository ticketRepository)
+    
+    
+    public TicketService(ITicketRepository ticketRepository, DatabaseContext databaseContext)
     {
         _ticketRepository = ticketRepository;
+        _context = databaseContext;
     }
 
     public TicketDTO CreateTicket(TicketCreateDTO incomingTicket)
@@ -25,11 +33,11 @@ public class TicketService : ITicketService
             email = incomingTicket.email,
             status = Status.OPENED
         };
-
-        //_ticketRepository.SaveTicket(ticket);
+        _context.Participants.Add(ticket);
+      //  _ticketRepository.SaveTicket(ticket);
         return ticket;
     }
 
-    public TicketDTO[] GetAllTickets() => _ticketRepository.GetAll();
+    public TicketDTO[] GetAllTickets() => _context.Participants.ToArray();
 
 }

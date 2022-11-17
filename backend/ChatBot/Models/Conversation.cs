@@ -1,6 +1,8 @@
 ﻿using ChatBot.Models.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace ChatBot.Models;
@@ -21,8 +23,8 @@ public class Conversation
         Messages = messages;
         Participants = participants;
     }
-
-    public Guid ID { get; } = Guid.NewGuid();
+    [Key]
+    public Guid ID { get; set; } = Guid.NewGuid();
 
     // Sorted by the timestamp of the messages
     // See Message.CompareTo() method for more info

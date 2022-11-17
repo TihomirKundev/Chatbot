@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChatBot.Models
 {
     public class Participant
     {
-        public Guid ID { get; }
+        [Key]
+        public Guid ID { get; set; }
 
         public Participant()
         {

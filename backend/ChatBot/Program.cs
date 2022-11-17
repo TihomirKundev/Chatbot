@@ -9,10 +9,15 @@ using System;
 using ChatBot.Repositories.EFC;
 using Fake_API.DAL.Repository.EFC.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// builder.Services.AddDbContext<DatabaseContext>(options =>
+// {
+//     options.UseMySql(ServerVersion.AutoDetect( builder.Configuration.GetConnectionString("DefaultConnection")));
+// });
 builder.Services.RegisterServices();
 builder.Services.AddCors(options =>
 {
@@ -25,7 +30,6 @@ builder.Services.AddHttpClient<IUserHttpClient, UserHttpClient>();
 
 //builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 
-builder.Services.AddDbContext<DatabaseContext>();
 
 var app = builder.Build();
 
