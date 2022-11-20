@@ -23,6 +23,9 @@ public class ErrorHandlerMiddleware
         }
         catch (Exception ex)
         {
+            if (context.Response.HasStarted)
+                throw;
+
             var response = context.Response;
             response.ContentType = "application/json";
 

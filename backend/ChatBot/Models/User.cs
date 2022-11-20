@@ -32,8 +32,6 @@ public class User : IParticipant
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException(nameof(FirstName));
-            if (!_nameRegex.IsMatch(value))
-                throw new FormatException("First name should only contain alphabetical characters.");
             _firstName = value;
         }
     }
@@ -45,8 +43,6 @@ public class User : IParticipant
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException(nameof(LastName));
-            if (!_nameRegex.IsMatch(value))
-                throw new FormatException("Last name should only contain alphabetical characters.");
             _lastName = value;
         }
     }
@@ -89,7 +85,10 @@ public class User : IParticipant
 
     private static readonly Regex _nameRegex = new("^[a-zA-Z]*$");
 
-    //private static readonly Regex _emailRegex = new ("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+	//private static readonly Regex _emailRegex = new ("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
-    //private static readonly Regex _phoneRegex = new ("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
+	//private static readonly Regex _phoneRegex = new ("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
+
+	public override bool Equals(object? obj) => obj is User otherUser && otherUser.ID == ID;
+	public override int GetHashCode() => ID.GetHashCode();
 }

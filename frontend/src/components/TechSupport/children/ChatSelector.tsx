@@ -1,19 +1,20 @@
-﻿import React, {useEffect, useState} from "react";
+﻿import { useState } from 'react';
+import { ConversationPreview } from '../ConversationPreview';
 import '../styles/style.css';
 
-import {Status, TicketDTO} from "../../DTO/TicketDTO";
-import {getAllTickets} from "../api";
 import ChatListEntry from './ChatListEntry';
 
-export const ChatSelector = ({tickets, selectedTicket, onSelect}) => {
+export const ChatSelector = ({conversations, selectedConversation, onSelect}: {conversations: ConversationPreview[], selectedConversation: string, onSelect: (conversation: string) => void}) => {
+    var [query, setQuery] = useState('');
+
     return <section className="discussions">
         <div className="discussion search">
             <div className="searchbar">
-                <i className="fa fa-search" aria-hidden="true"></i> {/* TODO: backend should expose a query onGet controller*/}
-                <input type="text" placeholder="Search..."/>
+                <i className="fa fa-search" aria-hidden="true"></i>
+                <input type="text" placeholder="Search..." value={query} onChange={e => setQuery(e.target.value)}/>
             </div>
         </div>
-        { tickets.map(ticket => <ChatListEntry ticket={ticket} isSelected={selectedTicket?.ticketNumber === ticket.ticketNumber} onSelect={onSelect}/>) }
+        { conversations.map(conversation => !query || conversation.userName?.toLowerCase().indexOf(query.toLowerCase()) !== -1 ? <ChatListEntry key={conversation.conversationId} conversation={conversation} isSelected={selectedConversation === conversation.conversationId} onSelect={onSelect}/> : null) }
     </section>;
 };
 

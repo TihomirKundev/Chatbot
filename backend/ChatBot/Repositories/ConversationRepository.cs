@@ -27,33 +27,21 @@ public class ConversationRepository : IConversationRepository
 
     public void SaveMessageToConversation(Message message, Guid conversationId)
     {
-        if (message.ID is null)
-        {
-            try
-            {
-                message.ID = SqlHelper.ExecuteNonQuery(
-                    _connString,
-                    "INSERT INTO messages(content, author_id, timestamp, conversation_id)" +
-                    "VALUES (@content, @authorid, @timestamp, @conversation_id);",
-                    new SqlParameter("@content", message.Content),
-                    new SqlParameter("@authorid", message.Author.ID),
-                    new SqlParameter("@timestamp", message.Timestamp),
-                    new SqlParameter("@conversation_id", conversationId));
-            }
-            catch (SqlException ex) when (ex.Number == 1062)
-            {
-                throw new DuplicateNameException();
-            }
-        }
-        else
+        try
         {
             SqlHelper.ExecuteNonQuery(
                 _connString,
-                "UPDATE messages SET  content = @content  author_id = @authorId timestamp = @timestamp WHERE id = @id;",
+                "INSERT INTO messages(id, content, author_id, timestamp, conversation_id)" +
+                "VALUES (@id, @content, @authorid, @timestamp, @conversation_id);",
                 new SqlParameter("@id", message.ID),
                 new SqlParameter("@content", message.Content),
-                new SqlParameter("@authorId", message.Author.ID),
-                new SqlParameter("@timestamp", message.Timestamp));
+                new SqlParameter("@authorid", message.Author.ID),
+                new SqlParameter("@timestamp", message.Timestamp),
+                new SqlParameter("@conversation_id", conversationId));
+        }
+        catch (SqlException ex) when (ex.Number == 1062)
+        {
+            throw new DuplicateNameException();
         }
     }
 
@@ -100,14 +88,15 @@ public class ConversationRepository : IConversationRepository
 
         // TODO: refactor to get only required users
         var users = _userService.GetAllUsers().ToDictionary(u => u.ID, u => (IParticipant)u);
-        users.Add(Bot.GetChatBotID(), new Bot());
 
         while(reader.Read())
         {
-            if (!users.TryGetValue(reader.GetGuid("user_id"), out var user))
+            if (!users.TryGetValue(Guid.Parse(reader.GetString("user_id")), out var user))
                 continue;
             participants.Add(user);
         }
+
+        participants.Add(new Bot());
         
         return participants;
     }
@@ -157,8 +146,8 @@ public class ConversationRepository : IConversationRepository
             new SqlParameter("@id", conversationID));
         while (reader2.Read())
         {
-            var id = reader2.GetInt32("id");
-            var authorID = reader2.GetGuid("author_id");
+            var id = Guid.Parse(reader2.GetString("id"));
+            var authorID = Guid.Parse(reader2.GetString("author_id"));
             var content = reader2.GetString("content");
             var timestamp = reader2.GetDateTime("timestamp");
 
@@ -181,5 +170,40 @@ public class ConversationRepository : IConversationRepository
             "DELETE FROM users WHERE id = @id",
             new SqlParameter("@id", id))
             > 0;
+    }
+
+    public IEnumerable<Conversation> GetConversationsByUser(User user)
+    {
+        using var reader = SqlHelper.ExecuteReader(
+            _connString,
+            "SELECT id FROM conversations INNER JOIN conversations_users ON id = conversation_id WHERE user_id = @user_id",
+            new SqlParameter("@user_id", user.ID));
+
+        while (reader.Read())
+            yield return new Conversation(Guid.Parse(reader.GetString("id")));
+    }
+
+    public IEnumerable<Conversation> GetConversations()
+    {
+        var conversations = new Dictionary<Guid, Conversation>();
+
+        using (var reader = SqlHelper.ExecuteReader(_connString, "SELECT id, status FROM conversations"))
+            while (reader.Read())
+                if (Guid.TryParse(reader.GetString("id"), out var conversationID))
+                    conversations.Add(conversationID, new Conversation(conversationID, (ConversationStatus) reader.GetInt32("status"), new(), new HashSet<IParticipant>()));
+
+        var users = _userService.GetAllUsers().ToDictionary(u => u.ID, u => u);
+
+        using (var reader = SqlHelper.ExecuteReader(_connString, "SELECT conversation_id, user_id FROM conversations_users"))
+            while (reader.Read())
+                if (Guid.TryParse(reader.GetString("conversation_id"), out var conversationID) && Guid.TryParse(reader.GetString("user_id"), out var userID) && conversations.TryGetValue(conversationID, out var conversation) && users.TryGetValue(userID, out var user))
+                    conversation.AddParticipant(user);
+
+        using (var reader = SqlHelper.ExecuteReader(_connString, "SELECT * FROM (SELECT id, author_id, content, timestamp, conversation_id, ROW_NUMBER() OVER (PARTITION BY conversation_id ORDER BY timestamp DESC) timestamp_rank FROM messages) _ WHERE timestamp_rank = 1"))
+            while (reader.Read())
+                if (Guid.TryParse(reader.GetString("id"), out var ID) && Guid.TryParse(reader.GetString("conversation_id"), out var conversationID) && Guid.TryParse(reader.GetString("author_id"), out var userID) && conversations.TryGetValue(conversationID, out var conversation) && users.TryGetValue(userID, out var user))
+                    conversation.AddMessage(new Message(ID, user, reader.GetString("content"), reader.GetDateTime("timestamp")));
+
+        return conversations.Values;
     }
 }

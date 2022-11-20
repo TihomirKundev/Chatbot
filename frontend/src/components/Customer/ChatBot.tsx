@@ -1,116 +1,93 @@
 ﻿import './style/style.css';
 import ChatIcon from '@mui/icons-material/Chat';
-import {useEffect, useState, useRef} from "react";
-import {MessageWsDTO, quickSelector} from "../DTO/messageWsDTO";
+import {useEffect, useState, useRef, useReducer, useMemo} from "react";
+import {ChatMessage, MessageFromServer, MessageToServer, QuickSelector} from "../DTO/messageWsDTO";
 import {webSocketServerAddress, botNickName, ChatBot2OpenningMessage, ChatBotOpennigMessage, techSupportNickName} from "../../app.properties";
-import {TicketCreateDTO} from "../DTO/ticketCreationDTO";
-import {generateTicket} from "./api";
-import {TicketDTO, ticketDTO} from "../DTO/ticketDTO";
 import ChatBox from './ChatBox';
+import userApi from '../Login/userApi';
 
-                                                               
+const sortChatMessages = (messages: Record<string, ChatMessage>, conversation: string) => {
+    var out: ChatMessage[] = [];
+
+    for (var id in messages)
+        if (messages[id].conversation === conversation)
+            out.push(messages[id]);
+
+    return out.sort((a, b) => a.timestamp > b.timestamp ? 1 : b.timestamp > a.timestamp ? -1 : 0);
+};
+
 const ChatBot = () => {
-    const ws = useRef(null);
+    const ws = useRef<WebSocket>(null);
 
-    const [ticket, setTicket] = useState<TicketDTO>(null);
-    const [wsMessages, setWsMessages] = useState<MessageWsDTO[]>([]);
+    const [conversation, setConversation] = useReducer((_: string, value: string) => {
+        sessionStorage.setItem('currentconversation', value);
+        return value;
+    }, null, () => sessionStorage.getItem('currentconversation'));
+
+    const [messages, setMessages] = useState<Record<string, ChatMessage>>({});
+    const messagesSorted = useMemo(() => sortChatMessages(messages, conversation), [messages, conversation]);
     
     const [isChatOpen, setIsChatOpen] = useState(false); 
 
-    enum ChatStep {ENTER_NAME, ENTER_EMAIL, CHAT_STARTED}
-    const [chatStep, setChatStep] = useState<ChatStep>(ChatStep.ENTER_NAME);
-    const [TicketCreatorDTO, setTicketCreatorDTO] = useState<TicketCreateDTO>({name: "", email: ""});
-    
-    const handleCreationOfTicket =  (clientMessage) => {
-        if (chatStep === ChatStep.ENTER_NAME) {
-            setTicketCreatorDTO({...TicketCreatorDTO, name: clientMessage});
-            setWsMessages([...wsMessages,
-                {sendClientId: "1", action: "message", msg: clientMessage, nick:''},{sendClientId: "1", action: "message", msg: "What`s your email?", nick: botNickName}])      
-            setChatStep(ChatStep.ENTER_EMAIL);
-           // setWsMessages([...wsMessages, {sendClientId: "1", action: "message", msg: clientMessage, nick:''}])
-        }
+    const sendMessage = (message: MessageToServer) => {
+        if (ws.current?.readyState === WebSocket.OPEN)
+            ws.current.send(JSON.stringify(message));
+        else
+            console.warn('Tried to send a message, but the WebSocket wasn\'t open');
+    };
 
-        if (chatStep === ChatStep.ENTER_EMAIL) {
-            let ticketDTO: TicketCreateDTO = {name: TicketCreatorDTO.name, email: clientMessage};
-            setTicketCreatorDTO(ticketDTO);  //idk wht ...TicketCreatorDTO doesnt work  
-            setWsMessages([...wsMessages, {sendClientId: "1", action: "message", msg: clientMessage, nick:''}])
+    const handleSend = (clientMessage: string, quickSelect: QuickSelector) => {
+        sendMessage({
+            action: 'sendChatMessage',
+            content: clientMessage,
+            conversation: conversation,
+            quickSelector: quickSelect
+        });
+    };
 
-            generateTicket(ticketDTO).then((response) => {
-                setTicket(response.data);
-                startChat(response.data);
-            });
-            setChatStep(ChatStep.CHAT_STARTED);
-        }
-    }
-
-    const handleSend = (clientMessage,QuickSelect:quickSelector) => {
-        if (chatStep !== ChatStep.CHAT_STARTED) {
-            handleCreationOfTicket(clientMessage);
-            return;
-        }
-        if (ws.current !== null) {
-            ws.current.send(JSON.stringify({Action: 'send', Content: clientMessage, Nickname: 'User', QuickSelector:QuickSelect ,Timestamp: Date.now()}));
+    const handleReceive = (e: MessageEvent<string>) => {
+        var data: MessageFromServer = JSON.parse(e.data);
+        switch (data.type) {
+        case 'conversation':
+            setConversation(data.id);
+            break;
+        case 'chatMessage':
+            setMessages(messages => ({...messages, [data.id]: data as ChatMessage}));
+            break;
+        default:
+            console.warn('Unkown message type ' + data.type);
+            break;
         }
     };
 
-    const handleReceive = (e, wsMessages/*, setWsMessages*/) => {
-        var data = JSON.parse(e.data);
-        if (data.Action === 1) // TODO: enum
-            setWsMessages([...wsMessages, {action: 'message', msg: data.Content, nick: data.Nickname}]);
+    const handleOpenChat = () => {
+        setIsChatOpen(true);
+        if (conversation)
+            sendMessage({ action: 'getMessageHistory', conversation: conversation });
+        else
+            sendMessage({ action: 'newConversation' });
     };
 
-    const loadMessages = () => { //TODO:WS
-        
-    };
-
-    const startChat = (data) => {//TODO:connect to web sockets
+    useEffect(() => {
         ws.current = new WebSocket(webSocketServerAddress);
         ws.current.onopen = e => {
-            ws.current.send(JSON.stringify({
-                Action: 'join',
-                Content: data.ticketNumber
-            }));
-            setWsMessages([...wsMessages, {sendClientId: "1", action: "message", msg: "We are connecting you to a representative. Please wait...", nick: botNickName}]);
+            ws.current.send(userApi.getCurrentUser().token);
         };
-        ws.current.onmessage = e => handleReceive(e, wsMessages, setWsMessages);
-    };
+        ws.current.onmessage = handleReceive;
 
-    const addStartChatMessages = () => {
-    setWsMessages([...wsMessages, {sendClientId: "1", action: "message", msg: ChatBotOpennigMessage, nick: botNickName},
-        {sendClientId: "1", action: "message", msg: ChatBot2OpenningMessage, nick: botNickName}, 
-        {sendClientId: "1", action: "message", msg: "What`s your name?", nick: botNickName}]);
-    };
-
-    //useEffect on load of component call addStartChatMessages
-    var brLoad = 0;
-    useEffect(() => {
-        if (brLoad === 0)
-            addStartChatMessages();
-        brLoad++;
-    }, [])
-
-    useEffect(() => {
-        console.log('new effect');
-        if (ws.current)
-            ws.current.onmessage = e => handleReceive(e, wsMessages, setWsMessages);
-        /*return () => {
+        return () => {
             ws.current?.close();
-        };*/
-    }, [wsMessages]);
+        };
+    }, []);
 
-
-   
-    
-    
-    
     return(
         <div id="center-text">
-            <div id="chat-circle"  className="btn btn-raised" onClick={() => setIsChatOpen(true)}>
+            <div id="chat-circle"  className="btn btn-raised" onClick={handleOpenChat}>
                 <div id="chat-overlay" ></div>
                 <ChatIcon/>
             </div>
 
-            { isChatOpen ? <ChatBox messages={wsMessages} onSend={handleSend} onClose={() => setIsChatOpen(false)}/> : <></> }
+            { isChatOpen ? <ChatBox messages={messagesSorted} onSend={handleSend} onClose={() => setIsChatOpen(false)}/> : null }
         </div>
     )
 }

@@ -11,37 +11,21 @@ namespace ChatBot.Auth.Jwt;
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly IAuthService _authService;
 
-    public JwtMiddleware(RequestDelegate next)
+    public JwtMiddleware(RequestDelegate next, IAuthService authService)
     {
         _next = next;
+        _authService = authService;
     }
 
-    public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils) //attaches userId to context
+    public async Task Invoke(HttpContext context) //attaches userId to context
     {
-        //get token, split bearer
-        var token = context.Request.Headers["Authorization"]
-            .FirstOrDefault()?
-            .Split(" ")
-            .Last();
-
-       
-          //  await _next(context);
-          //  throw new TokenNotFoundException("No token found");
-
-        //validate token    
-
-        //attach user to context on successful jwt validation
-        //might break due to guid
-        Guid? userId = jwtUtils.ValidateToken(token);
-        if (userId is not null)
+        if (context.Request.Headers.TryGetValue("Authorization", out var authorization))
         {
-            var user = userService.GetById(userId.Value);
-
-            if (user is not null)
-                context.Items["UserID"] = user.ID; //dude on the internet is puting th whole user object here
-            else
-                throw new AuthenticationException();
+            if (authorization[0].StartsWith("Bearer ") && _authService.CheckToken(authorization[0][7..]) is {} user)
+                context.Items["User"] = user;
+            else throw new AuthenticationException();
         }
 
         await _next(context);
