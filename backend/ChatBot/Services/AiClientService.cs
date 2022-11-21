@@ -59,7 +59,8 @@ public class AiClientService : IAiClientService
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var answer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return answer;
+        string cleaned = answer.Replace("\\n", " ");
+        return cleaned;
     }
     //getorderanswer(fakeApiUserDTO, message) get the user from the httpClient to the fakeApi
 
@@ -81,6 +82,8 @@ public class AiClientService : IAiClientService
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var answer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return answer;
+        string cleaned = answer.Replace("\\n", "");
+        
+        return cleaned;
     }
 }
