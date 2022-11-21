@@ -9,7 +9,7 @@ namespace Fake_API.DAL.Repository.Impl
     public class UserRepository : IUserRepository
     {
         private readonly string connString =
-            "connection string goes here";
+            "Server=mssqlstud.fhict.local;Database=dbi491971;User Id=dbi491971;Password=12345;";
 
         public User CheckAndGetUSer(string email, string password)
         {

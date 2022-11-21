@@ -1,9 +1,24 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChatBot.Models
 {
-    public interface IParticipant
+    public class Participant
     {
-        Guid ID { get; }
+        
+        public  Guid ID { get; set; }
+        
+        [Key]
+        public Guid EFID { get; set; }
+        
+        public Participant()
+        {
+
+        }
+
+        public Participant(Guid id)
+        {
+            ID = id;
+        }
     }
 }

@@ -13,7 +13,7 @@ public class Conversation
         Status = ConversationStatus.ONGOING;
     }
 
-    public Conversation(Guid id, ConversationStatus status, SortedSet<Message> messages, ISet<IParticipant> participants)
+    public Conversation(Guid id, ConversationStatus status, SortedSet<Message> messages, List<Participant> participants)
     {
         ID = id;
         Status = status;
@@ -21,17 +21,22 @@ public class Conversation
         Participants = participants;
     }
 
-    public Guid ID { get; } = Guid.NewGuid();
+    public Conversation()
+    {
+        
+    }
+
+    public Guid ID { get; set; } = Guid.NewGuid();
 
     // Sorted by the timestamp of the messages
     // See Message.CompareTo() method for more info
     public SortedSet<Message> Messages
     {
-        get => new(_messages);
+        get => _messages;
         set => _messages = value;
     }
 
-    public ConversationStatus Status { get; private set; }
+    public ConversationStatus Status { get;  set; }
 
     public DateTime StartTime => _messages.First().Timestamp;
 
@@ -46,9 +51,9 @@ public class Conversation
         }
     }
 
-    public ISet<IParticipant> Participants
+    public List<Participant> Participants
     {
-        get => new HashSet<IParticipant>(_participants);
+        get => _participants;
         set => _participants = value;
     }
     public bool AddMessage(Message message) => _messages.Add(message);
@@ -65,9 +70,9 @@ public class Conversation
     }
 
     private SortedSet<Message> _messages = new();
-    private ISet<IParticipant> _participants = new HashSet<IParticipant>();
+    private List<Participant> _participants = new List<Participant>();
 
-    public void AddParticipant(IParticipant participant)
+    public void AddParticipant(Participant participant)
     {
         _participants.Add(participant);
     }

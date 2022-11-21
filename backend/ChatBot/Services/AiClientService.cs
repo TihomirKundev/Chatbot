@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ChatBot.Http;
 using ChatBot.Http.Model;
 using ChatBot.Models;
+using Newtonsoft.Json;
 
 namespace ChatBot.Services;
 
@@ -66,13 +67,16 @@ public class AiClientService : IAiClientService
     {
         AiQuestionDTO question = new AiQuestionDTO() { question = message };
         FakeApiUserDTO user = _fakeApiHttpClient.GetFakeApiUserDTOByIdAsync(userID).Result;
-        OrderQuestionDTO orderQuestionDTO = new OrderQuestionDTO(question, user);
+        AIBEuserDTO convUser = new AIBEuserDTO(user.Id,user.FirstName,user.LastName,user.Email,user.Password,user.Phone,user.Role,user.Company.Name,user.Orders);
+        OrderQuestionDTO orderQuestionDTO = new OrderQuestionDTO(question.question, convUser);
         JsonContent converted = JsonContent.Create(orderQuestionDTO);
+        string b = System.Text.Json.JsonSerializer.Serialize(orderQuestionDTO);
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri($"{_aiBaseURL}/orderAnswer"),
-            Content = converted
+            Content = converted,
+           
         };
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();

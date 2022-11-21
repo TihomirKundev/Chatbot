@@ -61,6 +61,7 @@ const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: 
             <Box sx={{ display: 'inline-flex' }} style={{border:"solid", borderWidth:1 , borderColor:"#d3d3d3", backgroundColor:"#f4f7f9", width:"100%" }}>
                 <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Faq} currentValue={quickSelector}>🧪FAQ</QuickSelectorButton>
                 <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.CustomerSupport} currentValue={quickSelector}>🧑🏾‍💻TS</QuickSelectorButton>
+                <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Order} currentValue={quickSelector}>🚛Ord</QuickSelectorButton>
             </Box>
             <input type="text" id="chat-input" ref={chatRef} onKeyDown={detectEnter}  placeholder="Send a message..."/>
             <div onClick={() => {onSend(chatRef.current.value, quickSelector); chatRef.current.value = '';}} className="chat-submit" ><SendIcon/></div>

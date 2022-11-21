@@ -5,8 +5,8 @@ using ChatBot.Models.DTOs;
 namespace ChatBot.Http.Model
 {
     public record OrderQuestionDTO(
-        AiQuestionDTO question,
-        FakeApiUserDTO user
+        string question,
+        AIBEuserDTO user
     );
     
 }

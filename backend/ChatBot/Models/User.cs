@@ -4,9 +4,11 @@ using System.Text.RegularExpressions;
 
 namespace ChatBot.Models;
 
-public class User : IParticipant
+public class User : Participant
 {
-    public Guid ID { get; }
+   // public  Guid ID { get; }
+
+    public User() {}
 
     public User(Guid id,
                 string firstName,
@@ -24,7 +26,7 @@ public class User : IParticipant
         Password = password;
         Role = role;
     }
-
+    
     public string FirstName
     {
         get => _firstName;

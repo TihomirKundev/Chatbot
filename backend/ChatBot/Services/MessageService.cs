@@ -1,7 +1,7 @@
 using ChatBot.Extensions;
 using ChatBot.Models;
 using ChatBot.Models.DTOs;
-using ChatBot.Repositories.Interfaces;
+
 using ChatBot.Services.Interfaces;
 using System;
 
@@ -13,14 +13,14 @@ public class MessageService : IMessageService
 {
 
     private readonly IUserService _userService;
-    private readonly IConversationRepository _conversationRepo;
+   
 
     public MessageService(
-        IUserService userService, 
-        IConversationRepository conversationRepo)
+        IUserService userService
+        )
     {
         _userService = userService;
-        _conversationRepo = conversationRepo;
+       
     }
 
 
@@ -32,7 +32,7 @@ public class MessageService : IMessageService
         if (string.IsNullOrWhiteSpace(dto.Content))
             throw new InvalidMessageException("Message content cannot be empty.");
 
-        IParticipant? author = _userService.GetById(dto.AuthorID);
+        Participant? author = _userService.GetById(dto.AuthorID);
 
         if (author is null)
             throw new InvalidMessageException($"No participant exists with such ID: '{dto.AuthorID}'");
@@ -48,7 +48,7 @@ public class MessageService : IMessageService
 
     public bool DeleteMessageById(long id)
     {
-        return _conversationRepo.DeleteMessageById(id);
+        throw new NotImplementedException();
     }
 
     public class InvalidMessageException : Exception

@@ -4,22 +4,27 @@ namespace ChatBot.Models;
 
 public class Message : IComparable<Message>
 {
-    public Message(IParticipant author, string content, DateTime timestamp)
+    public Message(Participant author, string content, DateTime timestamp)
     {
         Author = author;
         Content = content;
         Timestamp = timestamp;
     }
 
-    public Message(Guid id, IParticipant author, string content, DateTime timestamp)
+    public Message(Guid id, Participant author, string content, DateTime timestamp)
         : this(author, content, timestamp)
     {
         ID = id;
     }
 
+    public Message()
+    {
+        
+    }
+    
     public Guid? ID { get; set; } = null;
 
-    public IParticipant Author { get; }
+    public Participant Author { get; set; }
 
     public string Content
     {

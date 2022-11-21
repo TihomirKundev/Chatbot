@@ -14,7 +14,7 @@ using ChatBot.Models.Enums;
 
 namespace ChatBot.Services;
 
-[SingletonService]
+[SingletonService]//TODO: Change to singleton
 public class WebSocketService : IWebSocketService
 {
     private class WebSocketClientCollection : KeyedCollection<User, WebSocketClient>
@@ -118,6 +118,7 @@ public class WebSocketService : IWebSocketService
                 Action = MessageAction.SEND,
                 QuickSelector = quickSelector
             }, conversation.ID);
+            
         }
     }
 
