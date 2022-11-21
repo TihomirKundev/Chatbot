@@ -62,7 +62,14 @@ const sortConversationMessages = (conversation: Conversation, users: Record<stri
 const TechSupportPage = () => {
     const [selectedConversation, setSelectedConversation] = useState<string>(null);
 
-    const [users, setUsers] = useState<Record<string, User>>({});
+    const [users, setUsers] = useState<Record<string, User>>(() => {
+        var currentUser = userApi.getCurrentUser();
+
+        if (currentUser)
+            return {[currentUser.id]: {'type': 'user', name: currentUser.firstName + ' ' + currentUser.lastName, id: currentUser.id}};
+        else
+            window.location.href = '/';
+    });
     const [conversations, setConversations] = useState<Record<string, Conversation>>({});
     const [messages, setMessages] = useState<Record<string, ChatMessage>>({});
 
