@@ -13,7 +13,7 @@ class orderStaus(Enum):
 
 
 class OrderDTO(BaseModel):
-    Id: str
-    Vehicles: list[VehicleDTO]
-    Status: orderStaus
+   #TODO:add orderID
+    vehicles: list[VehicleDTO]
+    status: orderStaus
 

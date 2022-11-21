@@ -33,7 +33,7 @@ def answerOrderQuestion(UserQuestion: orderQuestionDTO):
     result: str = tokenizer.decode(sample[0], truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
     slicedRes = result[result.find("Question:")+9:len(result)]  # get only the answer
     if("A:" in slicedRes):
-        slicedRes = slicedRes[0:slicedRes.find("A:")] # remove the A25: from the beginning of the answer
+        slicedRes = slicedRes[slicedRes.find("A:")+123:len(slicedRes)] # remove the A: from the beginning of the answer
     if("." in slicedRes):
         slicedRes = slicedRes[0:slicedRes.find(". ")]
     return slicedRes
