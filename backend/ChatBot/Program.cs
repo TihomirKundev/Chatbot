@@ -2,6 +2,7 @@ using ChatBot.Auth.Jwt;
 using ChatBot.Extensions;
 using ChatBot.Http;
 using ChatBot.Middlewares;
+using ChatBot.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +20,9 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient<IUserHttpClient, UserHttpClient>();
 
 var app = builder.Build();
+
+app.Services.GetService<IAiClientService>();
+
 // Configure the HTTP request pipeline.
 
 if (!app.Environment.IsDevelopment())

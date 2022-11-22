@@ -1,12 +1,13 @@
 ﻿import './style/style.css';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SendIcon from '@mui/icons-material/Send';
-import {MutableRefObject, useEffect, useRef, useState} from "react";
+import {MutableRefObject, ReactNode, useEffect, useMemo, useRef, useState} from "react";
 import {botNickName, techSupportNickName} from "../../app.properties";
 
-import ChatMessage from './ChatMessage';
+import ChatMessageElement from './ChatMessage';
 import {Box} from "@mui/material";
-import {quickSelector} from "../DTO/messageWsDTO";
+import {ChatMessage, QuickSelector} from "../DTO/messageWsDTO";
+import userApi from '../Login/userApi';
 
 
 function useChatScroll<T>(dep: T): MutableRefObject<HTMLDivElement> {
@@ -19,17 +20,25 @@ function useChatScroll<T>(dep: T): MutableRefObject<HTMLDivElement> {
     return ref;
 }
 
+const QuickSelectorButton = ({ onClick, targetValue, currentValue, children }: { onClick: (value: QuickSelector) => void, targetValue: QuickSelector, currentValue: QuickSelector, children: ReactNode }) => {
+    var selected = targetValue === currentValue;
 
+    return <div className="quickSelector" style={{ backgroundColor: selected && "#5a5eb9", color: selected && "white" }} onClick={() => onClick(targetValue)}>
+        <span>{children}</span>
+    </div>;
+};
 
-const ChatBox = ({messages, onSend, onClose}) => {
+const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: (message: string, quickSelector: QuickSelector) => void, onClose: () => void }) => {
     var chatRef = useRef<HTMLInputElement>();
 
     const ScrollRef = useChatScroll(messages)
-    const [QuickSelector, setQuickSelector] = useState<quickSelector>(quickSelector.ts);
+    const [quickSelector, setQuickSelector] = useState<QuickSelector>(QuickSelector.Faq);
+
+    const myId = useMemo(() => userApi.getCurrentUser().id, []);
 
     const detectEnter = (e) => {
         if (e.key === 'Enter' && chatRef.current.value !== "") {
-            onSend(chatRef.current.value, QuickSelector)
+            onSend(chatRef.current.value, quickSelector)
             chatRef.current.value = "";
         }}
 
@@ -42,7 +51,7 @@ const ChatBox = ({messages, onSend, onClose}) => {
             <div className="chat-box-overlay">
             </div>
             <div ref={ScrollRef} className="chat-logs">
-                { messages.map(wsMessage => <ChatMessage message={wsMessage.msg} fromSelf={wsMessage.nick !== techSupportNickName && wsMessage.nick !== botNickName}/>) }
+                { messages.map(wsMessage => <ChatMessageElement key={wsMessage.id}   message={wsMessage.content} fromSelf={wsMessage.author === myId}/>) }
 
                 <br/>
                 <br/>
@@ -50,15 +59,11 @@ const ChatBox = ({messages, onSend, onClose}) => {
         </div>
         <div  className="chat-input" style={{borderTop:"none"}}>
             <Box sx={{ display: 'inline-flex' }} style={{border:"solid", borderWidth:1 , borderColor:"#d3d3d3", backgroundColor:"#f4f7f9", width:"100%" }}>
-                <div className="quickSelector" style={{backgroundColor: QuickSelector? "" : "#5a5eb9", color: QuickSelector? "": "white"}} onClick={()=>setQuickSelector(quickSelector.faq)}>
-                    <span >🧪FAQ</span>
-                </div>
-                <div className="quickSelector" style={{backgroundColor: QuickSelector? "#5a5eb9" : "", color: QuickSelector? "white": ""}} onClick={()=>setQuickSelector(quickSelector.ts)}>
-                    <span >🧑🏾‍💻TS</span>
-                </div>
+                <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Faq} currentValue={quickSelector}>🧪FAQ</QuickSelectorButton>
+                <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.CustomerSupport} currentValue={quickSelector}>🧑🏾‍💻TS</QuickSelectorButton>
             </Box>
             <input type="text" id="chat-input" ref={chatRef} onKeyDown={detectEnter}  placeholder="Send a message..."/>
-            <div onClick={() => {onSend(chatRef.current.value,QuickSelector); chatRef.current.value = '';}} className="chat-submit" ><SendIcon/></div>
+            <div onClick={() => {onSend(chatRef.current.value, quickSelector); chatRef.current.value = '';}} className="chat-submit" ><SendIcon/></div>
         </div>
     </div>;
 }

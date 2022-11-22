@@ -15,5 +15,7 @@ namespace ChatBot.Repositories.Interfaces
         ISet<IParticipant> GetParticipantsByConversationID(Guid id);
         SortedSet<Message> GetAllMessagesByConversationID(Guid conversationID);
         bool DeleteMessageById(long id);
+        IEnumerable<Conversation> GetConversationsByUser(User user);
+        IEnumerable<Conversation> GetConversations();
     }
 }

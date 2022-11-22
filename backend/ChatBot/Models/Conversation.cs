@@ -66,4 +66,12 @@ public class Conversation
 
     private SortedSet<Message> _messages = new();
     private ISet<IParticipant> _participants = new HashSet<IParticipant>();
+
+    public void AddParticipant(IParticipant participant)
+    {
+        _participants.Add(participant);
+    }
+
+    public override bool Equals(object? obj) => obj is Conversation otherConversation && otherConversation.ID == ID;
+    public override int GetHashCode() => ID.GetHashCode();
 }

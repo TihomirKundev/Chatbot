@@ -11,13 +11,13 @@ public class Message : IComparable<Message>
         Timestamp = timestamp;
     }
 
-    public Message(long id, IParticipant author, string content, DateTime timestamp)
+    public Message(Guid id, IParticipant author, string content, DateTime timestamp)
         : this(author, content, timestamp)
     {
         ID = id;
     }
 
-    public long? ID { get; set; } = null;
+    public Guid? ID { get; set; } = null;
 
     public IParticipant Author { get; }
 
@@ -42,4 +42,7 @@ public class Message : IComparable<Message>
     }
 
     private string _content = default!;
+
+	public override bool Equals(object? obj) => obj is Message otherMessage && otherMessage.ID == ID;
+	public override int GetHashCode() => ID.GetHashCode();
 }

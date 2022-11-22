@@ -4,6 +4,8 @@ namespace ChatBot.Models.DTOs;
 
 public record MessageDTO
 {
+    public Guid? ID { get; set; }
+
     public Guid AuthorID { get; set; }
 
     public string? Content { get; set; }
@@ -12,9 +14,9 @@ public record MessageDTO
 
     public long? Timestamp { get; set; }
 
-    public MessageAction? Action { get; set; }
+    public MessageAction Action { get; set; } = MessageAction.SEND;
 
-    public QuickSelector? QuickSelector { get; set; }
+    public QuickSelector QuickSelector { get; set; } = QuickSelector.CustomerSupport;
 }
 public enum MessageAction
 {
@@ -25,7 +27,7 @@ public enum MessageAction
 
 public enum QuickSelector
 {
-    faq = 0,
-    ts = 1,
-    order = 2
+    CustomerSupport,
+    Faq,
+    Order
 }

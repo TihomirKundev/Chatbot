@@ -12,21 +12,30 @@ using Microsoft.AspNetCore.Http;
 
 namespace ChatBot.Auth.Jwt.Impl;
 
-[TransientService]
+[SingletonService]
 public class JwtUtils : IJwtUtils
 {
-    IConfiguration _configuration;
+    private readonly SecurityKey _key;
+    private readonly JwtSecurityTokenHandler _tokenHandler;
+	private readonly TokenValidationParameters _validationParameters;
 
-    public JwtUtils(IConfiguration configuration)
+	public JwtUtils(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Secret"]));
+		_tokenHandler = new JwtSecurityTokenHandler();
+        _validationParameters = new TokenValidationParameters {
+            ValidateIssuerSigningKey = true, //validate the key
+            IssuerSigningKey = _key, //set the key
+            ValidateIssuer = false, //we dont care about issuer
+            ValidateAudience = false, //we dont care about audience
+            ClockSkew = TimeSpan.Zero //remove delay of token when expire
+        };
     }
 
     public string GenerateToken(User account)
     {
         //token generation logic, valid for 1 day, who doesnt like can change it to more/less
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
@@ -34,39 +43,22 @@ public class JwtUtils : IJwtUtils
                 new Claim("UserID", account.ID.ToString()),
                 new Claim("Role", account.Role.ToString()) //role to the token?
             }), 
-            
             Expires = DateTime.Now.AddDays(1),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor); //create the token
-        
         
         return tokenHandler.WriteToken(token);
     }
 
-    public Guid? ValidateToken(string token) //returns userId if validation is successful
+    /// <returns>The UserID if validation is successful, otherwise null</returns>
+    public Guid? ValidateToken(string token)
     {
-        if (token is null)
-            return null;
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Secret"]);
-
         try
         {
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true, //validate the key
-                IssuerSigningKey = new SymmetricSecurityKey(key), //set the key
-                ValidateIssuer = false, //we dont care about issuer
-                ValidateAudience = false, //we dont care about audience
-                ClockSkew = TimeSpan.Zero //remove delay of token when expire
-            }, out SecurityToken validatedToken);
+            var principal = _tokenHandler.ValidateToken(token, _validationParameters, out _);
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            //returned userId from the token
-            return Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+            return Guid.Parse(principal.Claims.First(x => x.Type == "UserID").Value);
         }
         catch
         {

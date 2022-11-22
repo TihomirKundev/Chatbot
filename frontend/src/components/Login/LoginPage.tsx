@@ -38,12 +38,12 @@ export default function LoginPage() {
 
         userApi.login(request).then(() => {
             const user = userApi.getCurrentUser();
-            console.log(user);
-            if(user.role === "ADMIN") {
-                navigate("/admin");
-            }else if (user.role === "CUSTOMER") {
-                navigate("/customer");
-            }}).catch((error) => {
+            if (user.role === "ADMIN") {
+                window.location.href = "/admin";
+            } else if (user.role === "CUSTOMER") {
+                window.location.href = "/customer";
+            }
+        }).catch((error) => {
             setErrorMessage(error.response.data.message);
         });
     };
