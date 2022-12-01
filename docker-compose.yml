@@ -1,0 +1,82 @@
+
+services:
+  backend:
+    container_name: Backend
+    build: ./backend/ChatBot/
+    ports:
+      - 5000:80
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - mssql
+    
+
+  frontend:
+    container_name: Frontend
+    build: frontend
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+
+  mockapi:
+    container_name: Mock-API
+    build: ./MockAPI/MockAPI/
+    ports:
+      - 5019:80
+    networks:
+      - backend
+
+  mssql:
+    container_name: MS-SQL
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password1234
+    ports:
+      - 1433:1433
+    networks:
+      - backend
+    volumes:
+      - db-volume:/var/opt/mssql
+  
+  adminer:
+    container_name: Adminer
+    image: adminer:latest
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    links:
+      - mssql:db
+    restart: always
+
+  ai:
+    profiles:
+      - ai
+    container_name: Bloom-AI
+    build: ./BLOOM-be/
+    ports:
+      - 8000:8000
+    networks:
+      - backend
+    depends_on:
+      - frontend
+      - backend
+      - mockapi
+      - mssql
+      - adminer
+    volumes:
+      - ai-cache:/app/.cache
+
+volumes:
+  db-volume: {}
+  ai-cache: {}
+
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

@@ -6,9 +6,8 @@ from DTO.OrderQuestionRequestDTO import orderQuestionDTO
 from DTO.UserDTO import UserDTO
 from DTO.faqQuestionRequestDTO import faqQuestionDTO
 
+
 app = FastAPI()
-
-
 
 @app.get("/orderAnswer/")
 async def orderAnswer(incOrderQuestion: orderQuestionDTO):

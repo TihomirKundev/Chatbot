@@ -101,10 +101,7 @@ public class ChatBot
         styles.addElementStyle(WEB_BROWSER_TAG).shape(Shape.WebBrowser);
 
         // Auto-layout
-        for (var view : views.getViews())
-        {
-            view.enableAutomaticLayout();
-        }
+        contextView.enableAutomaticLayout();
 
         return workspace;
     }

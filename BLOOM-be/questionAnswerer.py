@@ -4,11 +4,15 @@ from Prompts import FAQwirhPromt
 from DTO.OrderQuestionRequestDTO import orderQuestionDTO
 from Prompts.OrderWithPrompt import OrderWithPrompt
 
+import Cache
+
 # torch.set_default_tensor_type(torch.cuda.FloatTensor)
 # torch.cuda.empty_cache()
-model = AutoModelForCausalLM.from_pretrained("bigscience/bloom-1b1", use_cache=True)
-tokenizer = AutoTokenizer.from_pretrained("bigscience/bloom-1b1")
 
+# model = AutoModelForCausalLM.from_pretrained("bigscience/bloom-1b1", use_cache=True)
+# tokenizer = AutoTokenizer.from_pretrained("bigscience/bloom-1b1")
+
+model, tokenizer = Cache.getModels();
 
 # set_seed(42)
 
