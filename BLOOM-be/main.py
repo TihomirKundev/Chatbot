@@ -16,5 +16,5 @@ async def orderAnswer(incOrderQuestion: orderQuestionDTO):
 
 @app.get("/faqAnswer/")
 async def faqAnswer(incFaqQuestion: faqQuestionDTO):
-    return questionAnswerer.answerFAQQuestion(incFaqQuestion.question)
-
+    return questionAnswerer.FAQanswer(incFaqQuestion.question)
+    # return questionAnswerer.answerFAQQuestion(incFaqQuestion.question)

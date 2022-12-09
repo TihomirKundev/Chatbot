@@ -1,4 +1,12 @@
-﻿faqPromt = '''
+﻿prompt = {
+"What can I do when I have issues with my account?": "Please contact our BAS World service desk. Our experts of the service desk can help you with all your questions regarding account issues.",
+"Will you send me an update if new vehicles become available that match my Saved Search criteria?": "Yes, we will! We send BAS World Saved Search email update and show you newly available vehicles.",
+"Why should I mark a vehicle as a favourite?": "You can see all your favourite vehicles quickly and easily in your BAS World dashboard – and you don’t have to search for these again. You will also get updates about any price reductions and see when a vehicle is sold.",
+"What will happen after I placed my order?": "After the order is placed and the payment is fullfilled the required documents will be sent by the seller. When the required documents are sent, the vehicle can be picked up, or will be delivered to your location.",
+"Can I buy a vehicle located in another country?": "Sure, why not? You need to import a vehicle to your country, but that shouldn’t be too difficult. However, please keep in mind that there are different rules regarding the import of a vehicle, and that you have verified any applicable customs fees and taxes. We advise you to seek advice from your local registration authority and contry's customs office at all times.",
+}
+
+faqPromt = '''
 Q1:What can I do when I have issues with my account?
 A1:Please contact our BAS World service desk. Our experts of the service desk can help you with all your questions regarding account issues.
 Q2:Will you send me an update if new vehicles become available that match my Saved Search criteria?
