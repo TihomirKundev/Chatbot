@@ -8,24 +8,42 @@ using System.Threading.Tasks;
 using ChatBot.Http;
 using ChatBot.Http.Model;
 using ChatBot.Models;
+using Newtonsoft.Json;
 
 namespace ChatBot.Services;
 
-[TransientService]
+[SingletonService]
 public class AiClientService : IAiClientService
 {
     private string _aiBaseURL = "http://127.0.0.1:8000";
-    private HttpClient _httpClient = new HttpClient();
-    private UserHttpClient _fakeApiHttpClient;
+    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly IUserHttpClient _fakeApiHttpClient;
+    private readonly IConversationService _conversationService;
 
-    public AiClientService() { }
-
-    public AiClientService(string aiBaseURL, HttpClient httpClient, UserHttpClient fakeApiHttpClient)
+    public AiClientService(HttpClient httpClient, IUserHttpClient fakeApiHttpClient, IConversationService conversationService)
     {
-        _aiBaseURL = aiBaseURL;
         _httpClient = httpClient;
-        _fakeApiHttpClient = new UserHttpClient(_httpClient);
+        _fakeApiHttpClient = fakeApiHttpClient;
+        _conversationService = conversationService;
+        _conversationService.MessageSent += OnMessageSent;
+    }
 
+    private async void OnMessageSent(Guid conversationID, MessageDTO message)
+    {
+        if (message.Content is not { } content)
+            return;
+
+        if (message.QuickSelector switch {
+            QuickSelector.Faq => await getFaqAnswer(content),
+            QuickSelector.Order => await getOrderAnswer(message.AuthorID, content),
+            _ => null
+        } is { } answer)
+            _conversationService.AddMessageToConversation(new MessageDTO {
+                AuthorID = Bot.GetChatBotID(),
+                Content = answer,
+                Nickname = "Bot",
+                Timestamp = DateTime.Now.ToUnixTimestamp()
+            }, conversationID);
     }
 
     public async Task<string> getFaqAnswer(string message)
@@ -41,25 +59,31 @@ public class AiClientService : IAiClientService
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var answer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return answer;
+        string cleaned = answer.Replace("\\n", " ");
+        return cleaned;
     }
     //getorderanswer(fakeApiUserDTO, message) get the user from the httpClient to the fakeApi
 
-    public async Task<string> getOrderAnswer(Guid id,string message)
+    public async Task<string> getOrderAnswer(Guid userID,string message)
     {
         AiQuestionDTO question = new AiQuestionDTO() { question = message };
-        FakeApiUserDTO user = _fakeApiHttpClient.GetFakeApiUserDTOByIdAsync(id).Result;
-        OrderQuestionDTO orderQuestionDTO = new OrderQuestionDTO(question, user);
+        FakeApiUserDTO user = _fakeApiHttpClient.GetFakeApiUserDTOByIdAsync(userID).Result;
+        AIBEuserDTO convUser = new AIBEuserDTO(user.Id,user.FirstName,user.LastName,user.Email,user.Password,user.Phone,user.Role,user.Company.Name,user.Orders);
+        OrderQuestionDTO orderQuestionDTO = new OrderQuestionDTO(question.question, convUser);
         JsonContent converted = JsonContent.Create(orderQuestionDTO);
+        string b = System.Text.Json.JsonSerializer.Serialize(orderQuestionDTO);
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri($"{_aiBaseURL}/orderAnswer"),
-            Content = converted
+            Content = converted,
+           
         };
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var answer = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return answer;
+        string cleaned = answer.Replace("\\n", "");
+        
+        return cleaned;
     }
 }

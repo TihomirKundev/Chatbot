@@ -10,12 +10,12 @@ class role(Enum):
 
 
 class UserDTO(BaseModel):
-    ID: str
-    FirstName: str
-    LastName: str
-    Email: str
-    Password: str
-    Phone: str
-    Role: role
-    Company: object  # will fill up later
-    Orders: list[OrderDTO]
+    id: str
+    firstName: str
+    lastName: str
+    email: str
+    password: str
+    phone: str
+    role: role
+    company: object  # will fill up later
+    orders: list[OrderDTO]

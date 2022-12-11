@@ -9,7 +9,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ChatBot.Models.DTOs;
+using Fake_API.Entities;
 using Fake_API.Entities.DTO;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ChatBot.Http;
 
@@ -36,11 +39,10 @@ public class UserHttpClient : IUserHttpClient
             };
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var userDto = JsonSerializer.Deserialize<User>(responseContent,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            UserDTOapi? userDto = JsonConvert.DeserializeObject<UserDTOapi>(responseContent);
 
-            return new User(userDto.ID, //trust the process
-                userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);
+            return new User(userDto.id, //trust the process
+                userDto.firstName, userDto.lastName, userDto.email, userDto.phone, userDto.password, userDto.Role);
         }
         catch (Exception)
         {
@@ -59,13 +61,13 @@ public class UserHttpClient : IUserHttpClient
             };
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var usersDto = JsonSerializer.Deserialize<List<User>>(responseContent,
+            var usersDto = JsonSerializer.Deserialize<List<UserDTOapi>>(responseContent,
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
             
             List<User> users = new List<User>();
             
-            usersDto.ForEach(item => users.Add(new User(item.ID, //trust the process
-                item.FirstName, item.LastName, item.Email, item.Phone, item.Password, item.Role)));
+            usersDto.ForEach(item => users.Add(new User(item.id, //trust the process
+                item.firstName, item.lastName, item.email, item.phone, item.password, item.Role)));
             
             return new HashSet<User>(users);
         }
@@ -91,11 +93,10 @@ public class UserHttpClient : IUserHttpClient
             };
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var userDto = JsonSerializer.Deserialize<User>(responseContent,
-                new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+            UserDTOapi? userDto = JsonConvert.DeserializeObject<UserDTOapi>(responseContent);
 
-            return new User(userDto.ID, //trust the process
-                userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);
+            return new User(userDto.id, //trust the process
+                userDto.firstName, userDto.lastName, userDto.email, userDto.phone, userDto.password, userDto.Role);
         }
         catch (Exception e)
         {
@@ -119,11 +120,10 @@ public class UserHttpClient : IUserHttpClient
             };
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            var userDto = JsonSerializer.Deserialize<User>(responseContent,
-                new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+            UserDTOapi? userDto = JsonConvert.DeserializeObject<UserDTOapi>(responseContent);
 
-            return new User(userDto.ID, //trust the process
-                userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role);
+            return new User(userDto.id, //trust the process
+                userDto.firstName, userDto.lastName, userDto.email, userDto.phone, userDto.password, userDto.Role);
         }
         catch (Exception e)
         {
@@ -148,7 +148,7 @@ public class UserHttpClient : IUserHttpClient
             var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
             var userDto = JsonSerializer.Deserialize<FakeApiUserDTO>(responseContent,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });   //TODO: DANGER FIX ME
 
             return new FakeApiUserDTO(userDto.Id, userDto.FirstName, userDto.LastName, userDto.Email, userDto.Phone, userDto.Password, userDto.Role
             , userDto.Company,userDto.Orders);

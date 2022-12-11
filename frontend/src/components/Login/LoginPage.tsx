@@ -33,23 +33,17 @@ export default function LoginPage() {
             email: data.get('email'),
             password: data.get('password'),
         }
-        //for demo purposes
-        if(request.email === "admin" && request.password === "admin") {
-            window.location.href = "/admin";
-        }else if(request.email === "customer" && request.password === "customer") {
-            window.location.href = "/customer";
-        }
 
-        //actual implementation, uncomment after demo
-        /*userApi.login(request).then(() => {
+        userApi.login(request).then(() => {
             const user = userApi.getCurrentUser();
-            if(user.role === "ADMIN") {
+            if (user.role === "ADMIN") {
                 window.location.href = "/admin";
-            }else if (user.role === "CUSTOMER") {
+            } else if (user.role === "CUSTOMER") {
                 window.location.href = "/customer";
-            }}).catch((error) => {
+            }
+        }).catch((error) => {
             setErrorMessage(error.response.data.message);
-        });*/
+        });
     };
 
     return (

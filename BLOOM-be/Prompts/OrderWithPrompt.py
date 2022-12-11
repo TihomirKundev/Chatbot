@@ -4,27 +4,27 @@
 def OrderWithPrompt(incOrderQuestion: orderQuestionDTO):
     Prompt = f'''
 Customer:
-customerId:{incOrderQuestion.user.ID}
-firstName:{incOrderQuestion.user.FirstName}
-lastName:{incOrderQuestion.user.LastName}
-email:{incOrderQuestion.user.Email}
-phone:{incOrderQuestion.user.Phone}
+customerId:{incOrderQuestion.user.id}
+firstName:{incOrderQuestion.user.firstName}
+lastName:{incOrderQuestion.user.lastName}
+email:{incOrderQuestion.user.email}
+phone:{incOrderQuestion.user.phone}
     '''
-    for o in incOrderQuestion.user.Orders:
+    for o in incOrderQuestion.user.orders:
         Prompt += f'''
 Order:
-orderNumber:{o.Id}
-orderStatus:{o.Status.name}
+orderNumber: 12345678765 #add order number
+orderStatus:{o.status.name}
         '''
-        for v in o.Vehicles:  # TODO:maybe change Vehicle to truck
+        for v in o.vehicles:  # TODO:maybe change Vehicle to truck
             Prompt += f'''
 Vehicle:
-VehicleReferenceNum:{v.ReferenceNum}
-Name:{v.Name}
-availability:{v.Availability}
-location:{v.Location}
-price:{v.Price}
-city:{v.City}
+VehicleReferenceNum:{v.referenceNum}
+Name:{v.name}
+availability:{v.availability}
+location:{v.location}
+price:{v.price}
+city:{v.city}
             '''
     Prompt += f'''
 Question:{incOrderQuestion.question}

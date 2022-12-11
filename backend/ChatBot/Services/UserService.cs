@@ -1,6 +1,7 @@
 ﻿using ChatBot.Extensions;
 using ChatBot.Http;
 using ChatBot.Models;
+using ChatBot.Models.Enums;
 using ChatBot.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,13 @@ public class UserService : IUserService
         _httpClient = httpClient;
     }
 
+    private readonly static User botUser = new User(Bot.GetChatBotID(), "Bot", "Bas World", "bot@basworld.com", "+31 413 72 83 20", "", Role.ADMIN);
+
     public User? GetById(Guid id)
     {
+        if (id == Bot.GetChatBotID())
+            return botUser;
+
         return _httpClient.GetByIdAsync(id).Result;
     }
 

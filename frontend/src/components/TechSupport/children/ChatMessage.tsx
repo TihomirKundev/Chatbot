@@ -1,8 +1,6 @@
-﻿import React from "react";
-import LetteredAvatar from 'react-lettered-avatar';
-import {Status} from "../../DTO/TicketDTO";
+﻿import LetteredAvatar from 'react-lettered-avatar';
 
-export const ChatMessage = ({senderName, message}) =>
+export const ChatMessage = ({senderName, message} : {senderName: string, message: string}) =>
     senderName ?
         <div className="message">
             <div className="photo">

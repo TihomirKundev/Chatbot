@@ -31,9 +31,16 @@ def answerOrderQuestion(UserQuestion: orderQuestionDTO):
     input_ids = tokenizer(prompt, return_tensors="pt") # .to(0)
     sample = model.generate(**input_ids, max_length=170, top_k=0, temperature=1.7)
     result: str = tokenizer.decode(sample[0], truncate_before_pattern=[r"\n\n^#", "^'''", "\n\n\n"])
-    slicedRes = result[result.find("Question:")+9:len(result)]  # get only the answer
-    if("A:" in slicedRes):
-        slicedRes = slicedRes[0:slicedRes.find("A:")] # remove the A25: from the beginning of the answer
-    if("." in slicedRes):
-        slicedRes = slicedRes[0:slicedRes.find(". ")]
+    slicedRes = result[result.find("Answer:")+7:len(result)]  # get only the answer
+    if("  \nA:" in slicedRes):
+        slicedRes = slicedRes[slicedRes.find("  \nA:")+6:] # remove the A: from the beginning of the answer    
+        if("\nB:" in slicedRes):
+            slicedRes = slicedRes[0:slicedRes.find("\nB:")]
+        if("\nA:" in slicedRes):
+            slicedRes = slicedRes[0:slicedRes.find("\nA:")]
+    else:
+        if("A:" in slicedRes):
+            slicedRes = slicedRes[0:slicedRes.find("A:")] # remove the A25: from the beginning of the answer
+        if("." in slicedRes):
+            slicedRes = slicedRes[0:slicedRes.find(". ")]
     return slicedRes

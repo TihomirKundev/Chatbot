@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatBot.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221117203903_InitialCreate")]
+    [Migration("20221121182607_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,6 @@ namespace ChatBot.Migrations
             modelBuilder.Entity("ChatBot.Models.Conversation", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<int>("Status")
@@ -32,35 +31,16 @@ namespace ChatBot.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("ChatBot.Models.DTOs.TicketDTO", b =>
-                {
-                    b.Property<string>("ticketnumber")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ticketnumber");
-
-                    b.ToTable("Participants");
+                    b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("ChatBot.Models.Message", b =>
                 {
-                    b.Property<long?>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("ID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AuthorEFID")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -69,16 +49,23 @@ namespace ChatBot.Migrations
                     b.Property<Guid?>("ConversationID")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("AuthorEFID");
 
                     b.HasIndex("ConversationID");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("ChatBot.Models.Participant", b =>
                 {
-                    b.Property<Guid>("ID")
+                    b.Property<Guid>("EFID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -89,7 +76,10 @@ namespace ChatBot.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("ID");
+                    b.Property<Guid>("ID")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("EFID");
 
                     b.HasIndex("ConversationID");
 
@@ -123,9 +113,17 @@ namespace ChatBot.Migrations
 
             modelBuilder.Entity("ChatBot.Models.Message", b =>
                 {
+                    b.HasOne("ChatBot.Models.Participant", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorEFID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ChatBot.Models.Conversation", null)
                         .WithMany("Messages")
                         .HasForeignKey("ConversationID");
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("ChatBot.Models.Participant", b =>

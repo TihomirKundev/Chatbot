@@ -5,9 +5,12 @@ namespace ChatBot.Models
 {
     public class Participant
     {
+        
+        public  Guid ID { get; set; }
+        
         [Key]
-        public Guid ID { get; set; }
-
+        public Guid EFID { get; set; }
+        
         public Participant()
         {
 
