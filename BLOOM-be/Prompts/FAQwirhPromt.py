@@ -48,7 +48,7 @@ A23:If you have chosen for the transport option offered by BAS World you can alw
 Q24:What do I need to fill in on a CMR?
 A24:Please see the following example for a complete signed: https://www.basworld.com/files/cms/pdf/cmr_proof_of_delivery.pdf.
 Q25:Can I change my password?
-A25:Yes, you can do that here: https://www.basworld.com/dashboard/my-settings/preferences.
+A25:Yes, you can do that here: https://www.basworld.com/ashboard/my-settings/preferences.
 Q26:Can I change my information?
 A26:Yes, you can do that here: https://www.basworld.com/dashboard/my-settings/my-profile.
 Q27:
