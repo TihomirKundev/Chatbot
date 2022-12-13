@@ -5,6 +5,7 @@ import questionAnswerer
 from DTO.OrderQuestionRequestDTO import orderQuestionDTO
 from DTO.UserDTO import UserDTO
 from DTO.faqQuestionRequestDTO import faqQuestionDTO
+from fastapi.responses import PlainTextResponse
 
 app = FastAPI()
 
@@ -19,3 +20,6 @@ async def orderAnswer(incOrderQuestion: orderQuestionDTO):
 async def faqAnswer(incFaqQuestion: faqQuestionDTO):
     return questionAnswerer.answerFAQQuestion(incFaqQuestion.question)
 
+@app.post("/modelClassification/", response_class=PlainTextResponse)
+async def faqAnswer(incFaqQuestion: faqQuestionDTO):
+    return questionAnswerer.determineModel(incFaqQuestion.question)

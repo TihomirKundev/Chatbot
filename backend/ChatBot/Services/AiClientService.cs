@@ -33,9 +33,11 @@ public class AiClientService : IAiClientService
         if (message.Content is not { } content)
             return;
 
-        if (message.QuickSelector switch {
-            QuickSelector.Faq => await getFaqAnswer(content),
-            QuickSelector.Order => await getOrderAnswer(message.AuthorID, content),
+	string classification = await getClassification(content);
+
+        if (classification switch {
+            "faq" => await getFaqAnswer(content),
+            "order" => await getOrderAnswer(message.AuthorID, content),
             _ => null
         } is { } answer)
             _conversationService.AddMessageToConversation(new MessageDTO {
@@ -44,6 +46,21 @@ public class AiClientService : IAiClientService
                 Nickname = "Bot",
                 Timestamp = DateTime.Now.ToUnixTimestamp()
             }, conversationID);
+    }
+
+    private async Task<string> getClassification(string message)
+    {
+        AiQuestionDTO question = new AiQuestionDTO() { question = message };
+        JsonContent converted = JsonContent.Create(question);
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"{_aiBaseURL}/modelClassification/"),
+            Content = converted
+        };
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 
     public async Task<string> getFaqAnswer(string message)
