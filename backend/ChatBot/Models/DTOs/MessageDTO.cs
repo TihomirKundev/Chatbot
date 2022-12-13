@@ -29,5 +29,6 @@ public enum QuickSelector
 {
     CustomerSupport,
     Faq,
-    Order
+    Order,
+    Auto
 }

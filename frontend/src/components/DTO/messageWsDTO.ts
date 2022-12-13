@@ -1,7 +1,8 @@
 ﻿export enum QuickSelector {
     Faq = "faq",
     CustomerSupport = "customersupport",
-    Order = "order" 
+    Order = "order",
+    Auto = "auto"
 };
 
 export type MessageToServer = {

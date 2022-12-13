@@ -42,7 +42,7 @@ const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: 
             chatRef.current.value = "";
         }}
 
-    return <div className="chat-box">
+    return <div className="chat-box" style={{minWidth:370}}>
         <div className="chat-box-header">
             ChatBot
             <span className="chat-box-toggle" onClick={onClose}><CancelIcon/></span>
@@ -59,6 +59,7 @@ const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: 
         </div>
         <div  className="chat-input" style={{borderTop:"none"}}>
             <Box sx={{ display: 'inline-flex' }} style={{border:"solid", borderWidth:1 , borderColor:"#d3d3d3", backgroundColor:"#f4f7f9", width:"100%" }}>
+                <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Auto} currentValue={quickSelector}>🔄️AUTO</QuickSelectorButton>
                 <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Faq} currentValue={quickSelector}>🧪FAQ</QuickSelectorButton>
                 <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.Order} currentValue={quickSelector}>🚛Ord</QuickSelectorButton>
                 <QuickSelectorButton onClick={setQuickSelector} targetValue={QuickSelector.CustomerSupport} currentValue={quickSelector}>🧑🏾‍💻TS</QuickSelectorButton>

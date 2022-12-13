@@ -15,7 +15,7 @@ namespace ChatBot.Services;
 [SingletonService]
 public class AiClientService : IAiClientService
 {
-    private string _aiBaseURL = "http://127.0.0.1:8000";
+    private string _aiBaseURL = "http://145.93.74.81:8000";
     private readonly HttpClient _httpClient = new HttpClient();
     private readonly IUserHttpClient _fakeApiHttpClient;
     private readonly IConversationService _conversationService;
@@ -33,7 +33,15 @@ public class AiClientService : IAiClientService
         if (message.Content is not { } content)
             return;
 
-	string classification = await getClassification(content);
+        string? classification = message.QuickSelector switch
+        {
+            QuickSelector.Auto => await getClassification(content),
+            QuickSelector.Faq => "faq",
+            QuickSelector.Order => "order",
+            _ => null
+        };
+    if (classification is null)
+        return;
 
         if (classification switch {
             "faq" => await getFaqAnswer(content),
