@@ -1,33 +1,19 @@
 ﻿from DTO.OrderQuestionRequestDTO import orderQuestionDTO
 
+import json
 
 def OrderWithPrompt(incOrderQuestion: orderQuestionDTO):
-    Prompt = f'''
-Customer:
-customerId:{incOrderQuestion.user.id}
-firstName:{incOrderQuestion.user.firstName}
-lastName:{incOrderQuestion.user.lastName}
-email:{incOrderQuestion.user.email}
-phone:{incOrderQuestion.user.phone}
-    '''
-    for o in incOrderQuestion.user.orders:
-        Prompt += f'''
-Order:
-orderNumber: 12345678765 #add order number
-orderStatus:{o.status.name}
-        '''
-        for v in o.vehicles:  # TODO:maybe change Vehicle to truck
-            Prompt += f'''
-Vehicle:
-VehicleReferenceNum:{v.referenceNum}
-Name:{v.name}
-availability:{v.availability}
-location:{v.location}
-price:{v.price}
-city:{v.city}
-            '''
-    Prompt += f'''
-Question:{incOrderQuestion.question}
-Answer:
-    '''
-    return Prompt
+    user = incOrderQuestion.user.to_json()
+    print(user)
+    first_order = user['Orders'][0]
+    first_vehicle = first_order['Vehicles'][0]
+    user_json = json.dumps(user, indent='\t', ensure_ascii=False)
+
+    return f"""This is an application that can retrieve data from a JSON file.
+***
+Data: {user_json}
+***
+Question: Where is vehicle {first_vehicle['Vehicle']}?
+Answer: The order's status is {first_order['Status']}. The vehicle is now in {first_vehicle['Location']}.
+Question: {incOrderQuestion.question}
+Answer:"""

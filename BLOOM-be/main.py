@@ -16,10 +16,10 @@ async def orderAnswer(incOrderQuestion: orderQuestionDTO):
     return questionAnswerer.answerOrderQuestion(incOrderQuestion)
 
 
-@app.get("/faqAnswer/")
+@app.get("/faqAnswer/", response_class=PlainTextResponse)
 async def faqAnswer(incFaqQuestion: faqQuestionDTO):
     return questionAnswerer.answerFAQQuestion(incFaqQuestion.question)
 
 @app.post("/modelClassification/", response_class=PlainTextResponse)
-async def faqAnswer(incFaqQuestion: faqQuestionDTO):
+async def modelClassification(incFaqQuestion: faqQuestionDTO):
     return questionAnswerer.determineModel(incFaqQuestion.question)

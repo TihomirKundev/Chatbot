@@ -27,6 +27,12 @@ Type: FAQ
 Question: When are you open?
 Type: FAQ
 ***
+Question: how do i change my password
+Type: FAQ
+***
+Question: can i change my password
+Type: FAQ
+***
 Question: """
 
 def getPromptWithQuestion(question: str):

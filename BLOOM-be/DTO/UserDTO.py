@@ -19,3 +19,12 @@ class UserDTO(BaseModel):
     role: role
     company: object  # will fill up later
     orders: list[OrderDTO]
+
+    def to_json(self):
+        return {
+            "First Name": self.firstName,
+            "Last Name": self.lastName,
+            "E-Mail": self.email,
+            "Phone": self.phone,
+            "Orders": [order.to_json() for order in self.orders]
+        }
