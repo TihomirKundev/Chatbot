@@ -16,7 +16,7 @@ _questions = {
 'What is "Saved Search"?':
 'When you do a detailed search on BAS World, you can save this search so you can perform the very same detailed search at a later point in time with just a single click. Our system can also send you updates to inform you about newly listed vehicles that match the criteria of your Saved Searches – to make sure you\'re always the first to know about newly listed vehicles that may be just what you are looking for.',
 'I want to buy a specific vehicle, how do I get in touch with the seller?':
-'Just fill in your preferred specifications, choose the desired vehicle and start a chat with the seller on https://www.basworld.com or via our application.',
+'Just fill in your preferred specifications, choose the desired vehicle and start a chat with the seller on www.basworld.com or via our application.',
 'How many vehicles can I add to my watch list?':
 'As many as you like.',
 'Is my information safe on BAS World?':
@@ -42,17 +42,32 @@ _questions = {
 'How am I insured for transport?':
 'By choosing Safe Deal you can make use of our delivery service, by using the delivery service provided by us you are insured under the CMR conditions. If you don\'t make use of our delivery service you\'ll have to discuss with your local insurance agent what the ideal insurance option would be.',
 'Do you offer a delivery guarantee?':
-'If you\'re using Safe Deal, a guarantee will be offered that the vehicle in the pictures will actually be delivered.',
+'If you are using Safe Deal, a guarantee will be offered that the vehicle in the pictures will actually be delivered.',
 'Do I need to buy a vignette or pay toll when I want to pick up my vehicle over the road?':
 'This is different in every country, you have to check this at the border of every country you enter.',
 'Can I reach the company that transports my vehicles to me?':
-'If you have chosen for the transport option offered by BAS World you can always contact our delivery desk here: https://www.basworld.com/contact-us',
-'What do I need to fill in on a CMR?':
-'Please see the following example for a complete signed: https://www.basworld.com/files/cms/pdf/cmr_proof_of_delivery.pdf.',
+'If you have chosen for the transport option offered by BAS World you can always contact our delivery desk',
 'Can I change my password?':
 'Yes, you can do that here: https://www.basworld.com/ashboard/my-settings/preferences.',
-'Can I change my information?':
-'Yes, you can do that here: https://www.basworld.com/dashboard/my-settings/my-profile.'
+
+'Where can I send my invoice to?':
+'You can upload your invoice in the BAS World portal. The invoice can be downloaded at any time.',
+'When can I expect to be paid?': #TODO: check if the max lenght is enough for this answer
+'''This really depends on what type of selling you have choosen:If you choose to sell it from your own location you can get paid as soon as the deal is made, or if it is a deferred payment you will get paid every month on a given date.
+If you let us sell it for you, you can get up to 70% advance payment of our estimated price and the rest when we manage to sell it.
+If you sell it to us, you get paid as soon as the deal is made.''',
+'Can I report a damage of a vehicle I need to transport?':
+'Yes you can report a damage via "Contact" page. Link for it you can find in the navigation bar located at the top of your page.',
+'I damaged the vehicle I`m transporting, what can I do?':
+'In this situaton the first thing you need to do is to inform your employer or the client about the damage.',
+'Can I cancel my active bid?':
+'No you can`t cancel your bid.',
+'Where can I send my CMR to?':
+'You can send a CMR on our email so we can check and approve it.',
+'Can I change the pick-up date which I entered on my bid?':
+'Unless the delivery process is already underway, you may alter the pick-up or delivery date of your bid.',
+'How can I adjust the pick-up or delivery date of my bid?':
+'To set up a new delivery time, please get in touch with us via our contact page.'        
 }
 
 _prompt = functools.reduce(lambda value, element: value + 'Question: ' + element + '\nAnswer: ' + _questions[element] + '\n', _questions, '') + 'Question: '
