@@ -10,14 +10,13 @@ class orderStaus(Enum):
     Canceled = 2
     Shipped = 3
     ProblemWithDelivery = 4
-
     def to_str(self):
         if self == orderStaus.PendingToBeShipped:
             return "Pending"
         elif self == orderStaus.ProblemWithDelivery:
             return "There was a problem with delivery"
         else:
-            return str(self)
+            return self.name
 
 
 class OrderDTO(BaseModel):
