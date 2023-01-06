@@ -5,6 +5,8 @@ import {ChatMessage, MessageFromServer, MessageToServer, QuickSelector} from "..
 import {webSocketServerAddress, botNickName, ChatBot2OpenningMessage, ChatBotOpennigMessage, techSupportNickName} from "../../app.properties";
 import ChatBox from './ChatBox';
 import userApi from '../Login/userApi';
+// @ts-ignore
+import HomePageShot from '../../images/HomePageShot.png';
 
 const sortChatMessages = (messages: Record<string, ChatMessage>, conversation: string) => {
     var out: ChatMessage[] = [];
@@ -81,7 +83,7 @@ const ChatBot = () => {
     }, []);
 
     return(
-        <div id="center-text">
+        <div id="center-text" style={{ backgroundImage: `url(${HomePageShot})`,height:'4072px'}}>
             <div id="chat-circle"  className="btn btn-raised" onClick={handleOpenChat}>
                 <div id="chat-overlay" ></div>
                 <ChatIcon/>

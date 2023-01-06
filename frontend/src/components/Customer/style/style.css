@@ -15,7 +15,7 @@ html, body {
   position: fixed;
   bottom: 50px;
   right: 50px;
-  background: #5A5EB9;
+  background: #05ad61;
   width: 80px;
   height: 80px;  
   border-radius: 50%;
@@ -32,7 +32,7 @@ html, body {
     border-radius: 45px;
     padding-right: 40px;
     padding-left: 40px;
-    color: #5865C3;
+    color: #05ad61;
 }
 #chat-overlay {
     background: rgba(255,255,255,0.1);
@@ -65,7 +65,7 @@ html, body {
   cursor:pointer;
 }
 .chat-box-header {
-  background: #5A5EB9;
+  background: #05ad61;
   height:70px;
   border-top-left-radius:5px;
   border-top-right-radius:5px; 
@@ -106,7 +106,7 @@ html, body {
   resize:none;
   outline:none;
   border:1px solid #ccc;
-  color:#888;
+  color:gray;
   border-top:none;
   border-bottom-right-radius:5px;
   border-bottom-left-radius:5px;
@@ -135,7 +135,7 @@ html, body {
   box-shadow:none;
   border:none;
   border-radius:50%;
-  color:#5A5EB9;
+  color:#05ad61;
   width:35px;
   height:35px;  
 }
@@ -154,12 +154,12 @@ html, body {
 .chat-logs::-webkit-scrollbar
 {
 	width: 5px;  
-	background-color: #F5F5F5;
+	background-color: #05ad61;
 }
 
 .chat-logs::-webkit-scrollbar-thumb
 {
-	background-color: #5A5EB9;
+	background-color: #05ad61;
 }
 
 
@@ -185,9 +185,9 @@ html, body {
   width:15%;
 }
 .cm-msg-text {
-  background:white;
+  background:#05ad61;
   padding:10px 15px 10px 15px;  
-  color:#666;
+  color:white;
   max-width:75%;
   float:left;
   margin-left:10px; 
@@ -201,7 +201,7 @@ html, body {
 .chat-msg.self > .cm-msg-text {  
   float:right;
   margin-right:10px;
-  background: #5A5EB9;
+  background: #05ad61;
   color:white;
 }
 .cm-msg-button>ul>li {

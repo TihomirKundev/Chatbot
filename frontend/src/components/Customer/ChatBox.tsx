@@ -23,7 +23,7 @@ function useChatScroll<T>(dep: T): MutableRefObject<HTMLDivElement> {
 const QuickSelectorButton = ({ onClick, targetValue, currentValue, children }: { onClick: (value: QuickSelector) => void, targetValue: QuickSelector, currentValue: QuickSelector, children: ReactNode }) => {
     var selected = targetValue === currentValue;
 
-    return <div className="quickSelector" style={{ backgroundColor: selected && "#5a5eb9", color: selected && "white" }} onClick={() => onClick(targetValue)}>
+    return <div className="quickSelector" style={{ borderColor: "#05ad61",backgroundColor: selected && "#05ad61", color: selected && "white" }} onClick={() => onClick(targetValue)}>
         <span>{children}</span>
     </div>;
 };
@@ -41,7 +41,7 @@ const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: 
             onSend(chatRef.current.value, quickSelector)
             chatRef.current.value = "";
         }}
-
+    
     return <div className="chat-box" style={{minWidth:370}}>
         <div className="chat-box-header">
             ChatBot

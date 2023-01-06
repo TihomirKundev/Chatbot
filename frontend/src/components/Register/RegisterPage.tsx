@@ -13,13 +13,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import registerApi from "./registerApi";
+import {theme} from '../../theme';
 // @ts-ignore
 import basLogo from '../../images/logo.png';
 import {FormHelperText} from "@mui/material";
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
-const theme = createTheme();
 
 export default function Register() {
 
@@ -69,7 +69,6 @@ export default function Register() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -77,8 +76,10 @@ export default function Register() {
                 >
                     <Box
                         sx={{
-                            height: '5vh',
-                            width: '80%',
+                            mt: 10,
+                            mb:2,
+                            height: '4vh',
+                            width: '100%',
                             backgroundImage: `url(${basLogo})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
@@ -92,7 +93,6 @@ export default function Register() {
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    color="success"
                                     required
                                     fullWidth
                                     id="firstName"
@@ -104,7 +104,6 @@ export default function Register() {
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    color="success"
                                     required
                                     fullWidth
                                     id="lastName"
@@ -115,7 +114,6 @@ export default function Register() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    color="success"
                                     required
                                     fullWidth
                                     id="phone"
@@ -126,7 +124,6 @@ export default function Register() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    color="success"
                                     required
                                     fullWidth
                                     id="email"
@@ -156,7 +153,6 @@ export default function Register() {
 
                         </Box>
                         <Button
-                            color="success"
                             type="submit"
                             fullWidth
                             variant="contained"

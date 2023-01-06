@@ -15,12 +15,11 @@ import Typography from '@mui/material/Typography';
 import bas from '../../images/BAS-World-HQ-0.jpg';
 // @ts-ignore
 import basLogo from '../../images/logo.png';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import {theme} from '../../theme';
 import userApi from './userApi';
 import {FormHelperText} from "@mui/material";
 
-
-const theme = createTheme();
 
 export default function LoginPage() {
 
@@ -87,7 +86,6 @@ export default function LoginPage() {
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1}}>
                             <TextField
-                                color="success"
                                 margin="normal"
                                 required
                                 fullWidth
@@ -98,7 +96,6 @@ export default function LoginPage() {
                                 autoFocus
                             />
                             <TextField
-                                color="success"
                                 margin="normal"
                                 required
                                 fullWidth
@@ -114,7 +111,6 @@ export default function LoginPage() {
                                 </FormHelperText>
                             </Box>
                             <Button
-                                color="success"
                                 type="submit"
                                 fullWidth
                                 variant="contained"
