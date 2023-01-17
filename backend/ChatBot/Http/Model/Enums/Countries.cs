@@ -4,7 +4,6 @@
 
     public enum Countries
     {
-
         [Display(Name = "Andorra", GroupName = "EU", Description = "020", ShortName = "AD")]
         AND = 3041565,
 

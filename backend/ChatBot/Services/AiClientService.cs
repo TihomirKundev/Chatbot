@@ -15,7 +15,7 @@ namespace ChatBot.Services;
 [SingletonService]
 public class AiClientService : IAiClientService
 {
-    private string _aiBaseURL = "http://145.93.74.81:8000";
+    private string _aiBaseURL = "http://145.93.76.90:8000";
     private readonly HttpClient _httpClient = new HttpClient();
     private readonly IUserHttpClient _fakeApiHttpClient;
     private readonly IConversationService _conversationService;

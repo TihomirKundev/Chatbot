@@ -32,7 +32,7 @@ const ChatBox = ({messages, onSend, onClose}: {messages: ChatMessage[], onSend: 
     var chatRef = useRef<HTMLInputElement>();
 
     const ScrollRef = useChatScroll(messages)
-    const [quickSelector, setQuickSelector] = useState<QuickSelector>(QuickSelector.Faq);
+    const [quickSelector, setQuickSelector] = useState<QuickSelector>(QuickSelector.Auto);
 
     const myId = useMemo(() => userApi.getCurrentUser().id, []);
 

@@ -83,7 +83,7 @@ const ChatBot = () => {
     }, []);
 
     return(
-        <div id="center-text" style={{ backgroundImage: `url(${HomePageShot})`,height:'4072px'}}>
+        <div id="center-text" style={{backgroundPosition:"center", backgroundImage: `url(${HomePageShot})`,height:'4072px'}}>
             <div id="chat-circle"  className="btn btn-raised" onClick={handleOpenChat}>
                 <div id="chat-overlay" ></div>
                 <ChatIcon/>
